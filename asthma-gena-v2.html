@@ -1,0 +1,1965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENA Asthma — From First Prescription to Final Biologic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:   #060d18;
+  --navy2:  #0a1628;
+  --navy3:  #0f2040;
+  --panel:  #111e35;
+  --border: rgba(255,255,255,0.07);
+  --teal:   #00c9a7;
+  --teal2:  rgba(0,201,167,0.12);
+  --teal3:  rgba(0,201,167,0.06);
+  --amber:  #e8a020;
+  --amber2: rgba(232,160,32,0.12);
+  --coral:  #e85454;
+  --coral2: rgba(232,84,84,0.12);
+  --blue:   #4d9de0;
+  --blue2:  rgba(77,157,224,0.12);
+  --sage:   #8ab4a0;
+  --text:   #dde6f0;
+  --dim:    #7a94b0;
+  --dimmer: #3a5070;
+  --serif:  'Playfair Display', Georgia, serif;
+  --mono:   'JetBrains Mono', 'Courier New', monospace;
+  --sans:   'Source Sans 3', system-ui, sans-serif;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; font-size:16px; }
+
+body {
+  font-family: var(--sans);
+  background: var(--navy);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ── GRAIN OVERLAY ── */
+body::after {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.025'/%3E%3C/svg%3E");
+  opacity:0.5;
+}
+
+/* ── NAV ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 48px; height:60px;
+  background:rgba(6,13,24,0.92);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+.nav-brand {
+  display:flex; align-items:center; gap:12px;
+}
+.nav-logo {
+  font-family:var(--mono); font-size:14px; font-weight:600;
+  color:var(--teal); letter-spacing:0.08em;
+}
+.nav-pipe { color:var(--dimmer); }
+.nav-sub { font-size:12px; color:var(--dim); font-weight:300; }
+.nav-links { display:flex; align-items:center; gap:28px; }
+.nav-links a {
+  font-size:11px; font-weight:500; color:var(--dim);
+  text-decoration:none; letter-spacing:0.1em; text-transform:uppercase;
+  transition:color 0.2s;
+}
+.nav-links a:hover { color:var(--teal); }
+.nav-badge {
+  font-family:var(--mono); font-size:10px; font-weight:600;
+  padding:5px 12px; border-radius:2px;
+  background:var(--teal2); border:1px solid rgba(0,201,167,0.25);
+  color:var(--teal); letter-spacing:0.08em;
+  text-decoration:none; transition:all 0.2s;
+}
+.nav-badge:hover { background:rgba(0,201,167,0.2); }
+
+/* ── HERO ── */
+.hero {
+  min-height:100vh; display:flex; flex-direction:column;
+  justify-content:flex-end; padding:80px 48px 72px;
+  position:relative; z-index:1;
+  background:
+    radial-gradient(ellipse 80% 60% at 60% 40%, rgba(0,201,167,0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 80% at 10% 60%, rgba(77,157,224,0.03) 0%, transparent 60%);
+}
+
+.hero-label {
+  font-family:var(--mono); font-size:10px; font-weight:500;
+  color:var(--teal); letter-spacing:0.3em; text-transform:uppercase;
+  margin-bottom:32px; opacity:0;
+  animation:fadeUp 0.8s 0.2s ease forwards;
+}
+
+.hero h1 {
+  font-family:var(--serif);
+  font-size:clamp(52px,7.5vw,108px);
+  font-weight:400; line-height:1.0;
+  letter-spacing:-0.03em;
+  margin-bottom:40px;
+  max-width:1100px;
+  opacity:0;
+  animation:fadeUp 0.9s 0.4s ease forwards;
+}
+.hero h1 .line2 { color:var(--teal); font-style:italic; }
+.hero h1 .line3 { color:var(--dim); font-size:0.72em; }
+
+.hero-body {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:48px; align-items:end;
+  opacity:0; animation:fadeUp 0.8s 0.7s ease forwards;
+}
+
+.hero-lead {
+  font-size:17px; font-weight:300; color:var(--dim);
+  line-height:1.75; max-width:560px;
+}
+.hero-lead strong { color:var(--text); font-weight:500; }
+
+.hero-stats {
+  display:grid; grid-template-columns:1fr 1fr; gap:2px;
+}
+.hero-stat {
+  background:var(--navy2); padding:20px 24px;
+  border-top:1px solid var(--border);
+}
+.hero-stat:first-child { border-top-color:var(--teal); }
+.stat-n {
+  font-family:var(--serif); font-size:40px; font-weight:700;
+  color:var(--text); line-height:1; margin-bottom:6px;
+}
+.stat-n .unit { font-size:22px; color:var(--teal); }
+.stat-l { font-size:11px; color:var(--dim); line-height:1.4; }
+
+/* scroll cue */
+.scroll-cue {
+  position:absolute; bottom:28px; right:48px;
+  font-family:var(--mono); font-size:9px; color:var(--dimmer);
+  letter-spacing:0.25em; text-transform:uppercase;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+}
+.scroll-cue::after {
+  content:''; width:1px; height:40px; background:var(--dimmer);
+  animation:scrollPulse 2s infinite;
+}
+@keyframes scrollPulse { 0%,100%{opacity:0.2} 50%{opacity:0.7} }
+
+/* ── GLOBAL SECTION STYLES ── */
+section { position:relative; z-index:1; }
+.w { max-width:1240px; margin:0 auto; padding:96px 48px; }
+.w-narrow { max-width:900px; margin:0 auto; padding:96px 48px; }
+
+.section-eyebrow {
+  display:flex; align-items:center; gap:16px; margin-bottom:20px;
+}
+.eyebrow-num {
+  font-family:var(--mono); font-size:11px; font-weight:600;
+  color:var(--teal); letter-spacing:0.15em;
+}
+.eyebrow-line { flex:1; height:1px; background:var(--border); }
+.eyebrow-label {
+  font-family:var(--mono); font-size:10px; color:var(--dimmer);
+  letter-spacing:0.2em; text-transform:uppercase;
+}
+
+.section-h2 {
+  font-family:var(--serif); font-size:clamp(32px,4vw,54px);
+  font-weight:400; line-height:1.08; letter-spacing:-0.02em;
+  margin-bottom:20px;
+}
+.section-h2 em { color:var(--teal); font-style:italic; }
+.section-h2 .muted { color:var(--dim); }
+
+.section-lead {
+  font-size:17px; font-weight:300; color:var(--dim);
+  line-height:1.75; max-width:700px; margin-bottom:56px;
+}
+.section-lead strong { color:var(--text); font-weight:500; }
+
+.hr { height:1px; background:var(--border); }
+
+/* ── FADE ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.reveal { opacity:0; transform:translateY(20px); transition:opacity 0.65s ease, transform 0.65s ease; }
+.reveal.in { opacity:1; transform:translateY(0); }
+
+/* ── SECTION 1: THE PROBLEM ── */
+#problem { background:var(--navy); }
+
+.problem-intro-grid {
+  display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px; margin-bottom:48px;
+}
+.pi-cell {
+  background:var(--navy2); padding:28px 24px;
+  transition:background 0.2s;
+}
+.pi-cell:hover { background:var(--panel); }
+.pi-num {
+  font-family:var(--serif); font-size:48px; font-weight:700;
+  color:var(--dimmer); line-height:1; margin-bottom:12px;
+}
+.pi-num .accent { color:var(--teal); }
+.pi-desc { font-size:13px; color:var(--dim); line-height:1.6; }
+.pi-desc strong { color:var(--text); display:block; margin-bottom:4px; font-size:14px; }
+
+/* Severity ladder */
+.severity-ladder {
+  display:flex; flex-direction:column; gap:2px; margin-bottom:48px;
+}
+.sev-row {
+  display:grid; grid-template-columns:140px 1fr 300px;
+  gap:0; background:var(--navy2);
+  border-left:3px solid var(--border);
+  transition:border-color 0.2s, background 0.2s;
+}
+.sev-row:hover { background:var(--panel); }
+.sev-row.active-row { border-left-color:var(--teal); background:var(--teal3); }
+.sev-row.warn-row { border-left-color:var(--amber); }
+.sev-step {
+  padding:18px 20px;
+  border-right:1px solid var(--border);
+  display:flex; flex-direction:column; justify-content:center;
+}
+.sev-step-label {
+  font-family:var(--mono); font-size:9px; color:var(--dimmer);
+  letter-spacing:0.15em; text-transform:uppercase; margin-bottom:4px;
+}
+.sev-step-name { font-size:13px; font-weight:600; color:var(--text); }
+.sev-body {
+  padding:18px 24px;
+  display:flex; flex-direction:column; justify-content:center;
+}
+.sev-drugs {
+  font-family:var(--mono); font-size:11px; color:var(--text);
+  margin-bottom:4px;
+}
+.sev-phenotype { font-size:12px; color:var(--dim); }
+.sev-phenotype em { color:var(--amber); font-style:normal; }
+.sev-side {
+  padding:18px 20px;
+  border-left:1px solid var(--border);
+  display:flex; flex-direction:column; justify-content:center;
+  align-items:flex-end;
+}
+.sev-gap {
+  font-family:var(--mono); font-size:10px; color:var(--coral);
+  letter-spacing:0.08em;
+}
+.sev-gena {
+  font-family:var(--mono); font-size:10px; color:var(--teal);
+  letter-spacing:0.08em;
+}
+.sev-future {
+  font-family:var(--mono); font-size:10px; color:var(--dimmer);
+  letter-spacing:0.08em;
+}
+
+/* ── SECTION 2: EVIDENCE ── */
+#evidence { background:var(--navy2); }
+
+/* Evidence grade pills */
+.ev-a { background:rgba(0,201,167,0.15); color:var(--teal); border:1px solid rgba(0,201,167,0.3); }
+.ev-b { background:rgba(232,160,32,0.12); color:var(--amber); border:1px solid rgba(232,160,32,0.25); }
+.ev-c { background:rgba(122,148,176,0.1); color:var(--dim); border:1px solid rgba(122,148,176,0.2); }
+.ev-pill {
+  display:inline-block; font-family:var(--mono); font-size:9px;
+  font-weight:600; padding:2px 8px; border-radius:2px;
+  letter-spacing:0.1em; vertical-align:middle; margin-right:6px;
+}
+
+.evidence-cols { display:grid; grid-template-columns:1fr 1fr; gap:48px; }
+
+.ev-block { margin-bottom:32px; }
+.ev-block-header {
+  display:flex; align-items:center; gap:12px; margin-bottom:12px;
+  padding-bottom:12px; border-bottom:1px solid var(--border);
+}
+.ev-block-icon { font-size:20px; }
+.ev-block-title { font-size:15px; font-weight:600; color:var(--text); }
+.ev-block-body { font-size:13.5px; color:var(--dim); line-height:1.7; }
+.ev-block-body strong { color:var(--text); font-weight:500; }
+.ev-block-body .data-point {
+  font-family:var(--mono); font-size:12px; color:var(--teal);
+  display:block; margin:8px 0 4px;
+}
+
+/* Tool table */
+.tool-table-wrap { overflow-x:auto; margin-bottom:40px; }
+.tool-table {
+  width:100%; border-collapse:collapse; font-size:12.5px;
+  white-space:nowrap;
+}
+.tool-table th {
+  font-family:var(--mono); font-size:9px; color:var(--dimmer);
+  letter-spacing:0.18em; text-transform:uppercase;
+  text-align:left; padding:10px 14px;
+  border-bottom:1px solid var(--border);
+  background:var(--navy);
+}
+.tool-table td {
+  padding:14px; border-bottom:1px solid var(--border);
+  color:var(--dim); vertical-align:top; white-space:normal;
+  line-height:1.5;
+}
+.tool-table tr:hover td { background:rgba(255,255,255,0.015); }
+.tool-table td:first-child { color:var(--text); font-weight:500; white-space:nowrap; }
+.tc-yes { color:var(--teal) !important; font-family:var(--mono); font-size:11px; }
+.tc-no  { color:var(--coral) !important; font-family:var(--mono); font-size:11px; }
+.tc-partial { color:var(--amber) !important; font-family:var(--mono); font-size:11px; }
+.tc-gena { color:var(--teal) !important; font-weight:600; }
+
+.gap-bar {
+  padding:20px 24px;
+  background:var(--coral2); border:1px solid rgba(232,84,84,0.2);
+  border-left:3px solid var(--coral);
+  border-radius:2px; margin-bottom:40px;
+}
+.gap-bar-label {
+  font-family:var(--mono); font-size:9px; color:var(--coral);
+  letter-spacing:0.2em; text-transform:uppercase; margin-bottom:8px;
+}
+.gap-bar p { font-size:14px; color:var(--text); line-height:1.65; }
+.gap-bar strong { color:var(--teal); }
+
+/* Research tools grid */
+.research-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; }
+.rg-card {
+  background:var(--navy); padding:24px;
+  border-top:2px solid var(--border);
+  transition:border-color 0.2s;
+}
+.rg-card:hover { border-top-color:var(--teal); }
+.rg-name { font-size:14px; font-weight:600; margin-bottom:4px; }
+.rg-origin {
+  font-family:var(--mono); font-size:10px; color:var(--dim);
+  letter-spacing:0.08em; margin-bottom:12px;
+}
+.rg-desc { font-size:12.5px; color:var(--dim); line-height:1.6; margin-bottom:10px; }
+.rg-gap {
+  font-size:12px; color:var(--amber);
+  padding:6px 10px; background:var(--amber2); border-radius:2px;
+}
+
+/* ── SECTION 3: GENA APPROACH ── */
+#approach { background:var(--navy); }
+
+.approach-track {
+  display:grid; grid-template-columns:200px 1fr;
+  gap:0; margin-bottom:2px;
+  background:var(--navy2); border:1px solid var(--border);
+  transition:border-color 0.2s;
+}
+.approach-track:hover { border-color:rgba(0,201,167,0.2); }
+.at-step {
+  padding:24px 20px;
+  border-right:1px solid var(--border);
+  background:var(--panel);
+  display:flex; flex-direction:column; justify-content:center;
+}
+.at-step-gina {
+  font-family:var(--mono); font-size:9px; color:var(--dimmer);
+  letter-spacing:0.15em; margin-bottom:6px;
+}
+.at-step-name { font-size:13px; font-weight:600; color:var(--text); margin-bottom:4px; }
+.at-step-sev { font-size:11px; color:var(--dim); }
+.at-body {
+  padding:24px; display:grid;
+  grid-template-columns:1fr 1fr; gap:24px;
+}
+.at-current { }
+.at-current-label {
+  font-family:var(--mono); font-size:9px; color:var(--coral);
+  letter-spacing:0.15em; margin-bottom:6px; text-transform:uppercase;
+}
+.at-current-text { font-size:12.5px; color:var(--dim); line-height:1.6; }
+.at-gena { }
+.at-gena-label {
+  font-family:var(--mono); font-size:9px; color:var(--teal);
+  letter-spacing:0.15em; margin-bottom:6px; text-transform:uppercase;
+  display:flex; align-items:center; gap:8px;
+}
+.gena-pulse {
+  width:6px; height:6px; border-radius:50%; background:var(--teal);
+  animation:gpulse 2s infinite;
+}
+@keyframes gpulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.6)} }
+.at-gena-text { font-size:12.5px; color:var(--text); line-height:1.6; }
+
+/* ── SECTION 4: LIVE TOOL ── */
+#tool { background:var(--navy2); }
+
+.tool-layout { display:grid; grid-template-columns:1fr 400px; gap:32px; align-items:start; }
+
+.phenotype-form { background:var(--panel); border:1px solid var(--border); }
+.pf-header {
+  padding:16px 20px; background:var(--teal2);
+  border-bottom:1px solid rgba(0,201,167,0.15);
+  display:flex; align-items:center; gap:10px;
+}
+.pf-title {
+  font-family:var(--mono); font-size:11px; font-weight:600;
+  color:var(--teal); letter-spacing:0.1em; text-transform:uppercase;
+}
+.pf-body { padding:20px; }
+
+.pf-section { margin-bottom:20px; }
+.pf-section-label {
+  font-family:var(--mono); font-size:9px; color:var(--dimmer);
+  letter-spacing:0.2em; text-transform:uppercase;
+  margin-bottom:12px; padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+
+.slider-row {
+  display:flex; align-items:center; gap:10px; margin-bottom:10px;
+}
+.sl-label { font-family:var(--mono); font-size:11px; color:var(--dim); min-width:120px; }
+.sl-input {
+  flex:1; -webkit-appearance:none; height:2px;
+  background:var(--border); border-radius:1px; outline:none; cursor:pointer;
+}
+.sl-input::-webkit-slider-thumb {
+  -webkit-appearance:none; width:12px; height:12px;
+  border-radius:50%; background:var(--teal); cursor:pointer;
+  transition:transform 0.15s;
+}
+.sl-input::-webkit-slider-thumb:hover { transform:scale(1.3); }
+.sl-val {
+  font-family:var(--mono); font-size:11px; font-weight:600;
+  color:var(--text); min-width:52px; text-align:right;
+}
+.sl-val.hi { color:var(--teal); }
+.sl-val.warn { color:var(--amber); }
+.sl-val.crit { color:var(--coral); }
+
+.toggle-grid { display:flex; flex-wrap:wrap; gap:6px; }
+.tog {
+  padding:5px 11px; border-radius:2px;
+  background:var(--navy); border:1px solid var(--border);
+  color:var(--dim); font-family:var(--mono); font-size:10px;
+  cursor:pointer; transition:all 0.15s; user-select:none;
+}
+.tog:hover { border-color:var(--teal); color:var(--teal); }
+.tog.on { background:var(--teal2); border-color:rgba(0,201,167,0.4); color:var(--teal); }
+.tog.urgent.on { background:var(--coral2); border-color:rgba(232,84,84,0.4); color:var(--coral); }
+
+/* Output panel */
+.output-panel { background:var(--panel); border:1px solid var(--border); }
+.op-header {
+  padding:14px 18px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.op-title {
+  font-family:var(--mono); font-size:10px; color:var(--teal);
+  letter-spacing:0.15em; text-transform:uppercase;
+}
+.op-status {
+  font-family:var(--mono); font-size:9px; color:var(--dimmer);
+  letter-spacing:0.1em;
+}
+.op-body { padding:18px; }
+
+.phenotype-bars { margin-bottom:16px; }
+.pbar-row { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
+.pbar-label { font-family:var(--mono); font-size:10px; color:var(--dim); min-width:148px; }
+.pbar-track { flex:1; height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+.pbar-fill { height:100%; border-radius:2px; transition:width 0.5s ease; background:var(--teal); }
+.pbar-fill.amber { background:var(--amber); }
+.pbar-fill.coral { background:var(--coral); }
+.pbar-fill.blue  { background:var(--blue); }
+.pbar-pct { font-family:var(--mono); font-size:10px; color:var(--text); min-width:30px; text-align:right; }
+
+.op-divider { height:1px; background:var(--border); margin:12px 0; }
+
+.op-section-label {
+  font-family:var(--mono); font-size:9px; color:var(--dimmer);
+  letter-spacing:0.18em; text-transform:uppercase; margin-bottom:10px;
+}
+
+.rec-item-out {
+  display:flex; gap:10px; margin-bottom:10px; padding-bottom:10px;
+  border-bottom:1px solid var(--border);
+}
+.rec-item-out:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+.rec-rank { font-family:var(--mono); font-size:11px; font-weight:600; color:var(--teal); min-width:18px; }
+.rec-rank.urgent { color:var(--coral); }
+.rec-drug-name { font-size:12px; font-weight:600; color:var(--text); margin-bottom:3px; }
+.rec-drug-reason { font-size:11px; color:var(--dim); line-height:1.5; }
+
+.alert-box {
+  padding:12px 14px; border-radius:2px; margin-bottom:12px;
+  border-left:3px solid var(--coral);
+  background:var(--coral2);
+}
+.alert-box-label {
+  font-family:var(--mono); font-size:9px; color:var(--coral);
+  letter-spacing:0.15em; margin-bottom:4px;
+}
+.alert-box-text { font-size:12px; color:var(--text); line-height:1.5; }
+
+.gena-insight-box {
+  padding:12px 14px; border-radius:2px;
+  background:var(--teal2); border:1px solid rgba(0,201,167,0.15);
+  margin-bottom:12px;
+}
+.gib-label {
+  font-family:var(--mono); font-size:9px; color:var(--teal);
+  letter-spacing:0.15em; margin-bottom:6px;
+  display:flex; align-items:center; gap:6px;
+}
+.gib-text { font-size:12px; color:var(--text); line-height:1.6; }
+.gib-path {
+  font-family:var(--mono); font-size:11px; color:var(--teal);
+  margin-top:8px; padding:6px 8px;
+  background:rgba(0,201,167,0.08); border-radius:2px;
+}
+
+/* ── SECTION 5: CASES ── */
+#cases { background:var(--navy); }
+
+.case-tabs { display:flex; gap:2px; margin-bottom:2px; flex-wrap:wrap; }
+.case-tab-btn {
+  flex:1; min-width:160px; padding:14px 16px;
+  background:var(--navy2); border:none; cursor:pointer;
+  color:var(--dim); font-family:var(--sans); font-size:13px; font-weight:500;
+  text-align:left; transition:all 0.2s;
+  border-top:2px solid var(--border);
+}
+.case-tab-btn:hover { background:var(--panel); color:var(--text); }
+.case-tab-btn.active { background:var(--panel); color:var(--text); border-top-color:var(--teal); }
+.case-tab-btn .t-severity {
+  font-family:var(--mono); font-size:9px; display:block;
+  margin-top:3px; letter-spacing:0.1em; text-transform:uppercase;
+}
+.case-tab-btn.active .t-severity { color:var(--teal); }
+.case-tab-btn .t-severity { color:var(--dimmer); }
+
+.case-panel { display:none; }
+.case-panel.active { display:grid; grid-template-columns:1fr 1fr; }
+.c-left, .c-right { padding:32px 36px; }
+.c-left { background:var(--navy2); border-right:1px solid var(--border); }
+.c-right { background:var(--panel); }
+
+.c-patient-header {
+  display:flex; align-items:center; gap:14px;
+  margin-bottom:20px; padding-bottom:20px; border-bottom:1px solid var(--border);
+}
+.c-avatar {
+  width:44px; height:44px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:16px; font-weight:600;
+  flex-shrink:0;
+}
+.c-patient-name { font-size:16px; font-weight:600; color:var(--text); }
+.c-patient-meta { font-family:var(--mono); font-size:11px; color:var(--dim); margin-top:3px; }
+
+.c-quote {
+  font-family:var(--serif); font-size:16px; font-style:italic;
+  color:var(--dim); line-height:1.55;
+  border-left:2px solid var(--border); padding-left:14px;
+  margin-bottom:20px;
+}
+
+.c-label {
+  font-family:var(--mono); font-size:9px; color:var(--dimmer);
+  letter-spacing:0.2em; text-transform:uppercase;
+  margin-bottom:8px; margin-top:16px;
+}
+.c-label:first-of-type { margin-top:0; }
+
+.bm-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:7px 0; border-bottom:1px solid var(--border);
+  font-size:12.5px;
+}
+.bm-row:last-child { border-bottom:none; }
+.bm-name { color:var(--dim); font-family:var(--mono); font-size:11px; }
+.bm-val { font-family:var(--mono); font-size:12px; font-weight:600; color:var(--text); }
+.bm-val.hi { color:var(--teal); }
+.bm-val.warn { color:var(--amber); }
+.bm-val.crit { color:var(--coral); }
+
+.c-miss {
+  margin:16px 0; padding:12px 14px;
+  background:var(--coral2); border-left:3px solid var(--coral);
+  font-size:12.5px; color:var(--text); line-height:1.65;
+}
+.c-miss strong { color:var(--coral); }
+
+.c-gena-output {
+  background:var(--teal2); border:1px solid rgba(0,201,167,0.15);
+  padding:14px; margin-bottom:14px;
+}
+.c-gena-label {
+  font-family:var(--mono); font-size:9px; color:var(--teal);
+  letter-spacing:0.18em; text-transform:uppercase;
+  margin-bottom:10px; display:flex; align-items:center; gap:8px;
+}
+.c-gena-text { font-size:13px; color:var(--text); line-height:1.65; }
+.c-gena-path {
+  font-family:var(--mono); font-size:11px; color:var(--teal);
+  margin-top:10px; padding:8px 10px;
+  background:rgba(0,201,167,0.08);
+}
+
+.c-recs { margin-bottom:14px; }
+.c-rec {
+  display:flex; gap:10px; padding:10px 0;
+  border-bottom:1px solid var(--border);
+}
+.c-rec:last-child { border-bottom:none; }
+.c-rec-num { font-family:var(--mono); font-size:11px; font-weight:600; color:var(--teal); min-width:18px; }
+.c-rec-num.urgent { color:var(--coral); }
+.c-rec-name { font-size:13px; font-weight:600; color:var(--text); margin-bottom:3px; }
+.c-rec-why { font-size:12px; color:var(--dim); line-height:1.55; }
+
+.c-outcome {
+  background:var(--navy); padding:14px;
+  border:1px solid var(--border);
+}
+.c-outcome-label {
+  font-family:var(--mono); font-size:9px; color:var(--dimmer);
+  letter-spacing:0.15em; text-transform:uppercase; margin-bottom:6px;
+}
+.c-outcome-text { font-size:12.5px; color:var(--dim); line-height:1.6; }
+
+/* ── SECTION 6: EVIDENCE FOUNDATION ── */
+#foundation { background:var(--navy2); }
+
+.found-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px; }
+.found-card {
+  background:var(--navy); padding:28px 24px;
+  border-bottom:2px solid var(--border);
+  transition:border-color 0.2s, background 0.2s;
+}
+.found-card:hover { border-bottom-color:var(--teal); background:var(--teal3); }
+.found-card-icon { font-size:24px; margin-bottom:14px; }
+.found-card-study {
+  font-family:var(--mono); font-size:10px; color:var(--teal);
+  letter-spacing:0.1em; margin-bottom:8px;
+}
+.found-card-title { font-size:14px; font-weight:600; margin-bottom:8px; color:var(--text); }
+.found-card-text { font-size:12.5px; color:var(--dim); line-height:1.6; }
+.found-card-finding {
+  font-family:var(--mono); font-size:11px; color:var(--text);
+  margin-top:10px; padding:8px 10px;
+  background:var(--navy2); border-left:2px solid var(--teal);
+}
+.found-card-gap {
+  font-size:11.5px; color:var(--amber);
+  margin-top:8px; padding:6px 10px;
+  background:var(--amber2);
+}
+
+/* ── SECTION 7: PITCH ── */
+#pitch { background:var(--navy); }
+
+.pitch-timeline {
+  display:flex; gap:2px; margin-bottom:56px; position:relative;
+}
+.pitch-timeline::before {
+  content:''; position:absolute;
+  top:50%; left:0; right:0; height:1px;
+  background:var(--border); transform:translateY(-50%);
+  z-index:0;
+}
+.pt-phase {
+  flex:1; position:relative; z-index:1;
+  background:var(--navy2); padding:24px 20px;
+  border-top:2px solid var(--border);
+  transition:border-color 0.2s, background 0.2s;
+  cursor:default;
+}
+.pt-phase:hover { border-top-color:var(--teal); background:var(--teal3); }
+.pt-phase.current { border-top-color:var(--teal); }
+.pt-num {
+  font-family:var(--mono); font-size:32px; font-weight:600;
+  color:var(--border); line-height:1; margin-bottom:12px;
+}
+.pt-phase.current .pt-num { color:var(--teal); }
+.pt-title { font-size:14px; font-weight:600; margin-bottom:8px; }
+.pt-text { font-size:12px; color:var(--dim); line-height:1.6; }
+.pt-tag {
+  display:inline-block; margin-top:8px;
+  font-family:var(--mono); font-size:9px; letter-spacing:0.1em;
+  padding:3px 8px; border-radius:2px;
+}
+.pt-tag.now { background:var(--teal2); color:var(--teal); border:1px solid rgba(0,201,167,0.25); }
+.pt-tag.soon { background:var(--amber2); color:var(--amber); border:1px solid rgba(232,160,32,0.2); }
+.pt-tag.future { background:var(--navy); color:var(--dimmer); border:1px solid var(--border); }
+
+.pitch-close {
+  text-align:center; padding:72px 32px;
+  background:var(--navy2); border:1px solid var(--border);
+  position:relative; overflow:hidden;
+}
+.pitch-close::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,201,167,0.04), transparent);
+  pointer-events:none;
+}
+.pitch-close-eyebrow {
+  font-family:var(--mono); font-size:10px; color:var(--teal);
+  letter-spacing:0.25em; text-transform:uppercase; margin-bottom:24px;
+}
+.pitch-close h2 {
+  font-family:var(--serif); font-size:clamp(28px,4vw,48px);
+  font-weight:400; line-height:1.15; margin-bottom:24px;
+}
+.pitch-close h2 em { color:var(--teal); font-style:italic; }
+.pitch-close p {
+  font-size:16px; color:var(--dim); max-width:560px;
+  margin:0 auto 36px; line-height:1.75;
+}
+.pitch-btn {
+  display:inline-block; padding:14px 36px;
+  background:var(--teal); color:var(--navy); font-weight:600;
+  font-size:14px; text-decoration:none; letter-spacing:0.04em;
+  transition:all 0.2s; border-radius:2px;
+}
+.pitch-btn:hover { background:#00f0c8; transform:translateY(-2px); }
+
+/* ── FOOTER ── */
+footer {
+  z-index:1; position:relative;
+  border-top:1px solid var(--border);
+  padding:24px 48px; background:var(--navy);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.foot-left { font-family:var(--mono); font-size:11px; color:var(--dimmer); }
+.foot-left strong { color:var(--teal); }
+.foot-right { font-size:11px; color:var(--dimmer); max-width:420px; text-align:right; }
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px) {
+  nav { padding:0 24px; }
+  .nav-links { display:none; }
+  .hero { padding:80px 24px 56px; }
+  .hero-body { grid-template-columns:1fr; }
+  .hero-stats { grid-template-columns:1fr 1fr; }
+  .w, .w-narrow { padding:64px 24px; }
+  .problem-intro-grid { grid-template-columns:1fr; }
+  .sev-row { grid-template-columns:1fr; }
+  .sev-side { border-left:none; border-top:1px solid var(--border); align-items:flex-start; }
+  .evidence-cols { grid-template-columns:1fr; }
+  .research-grid { grid-template-columns:1fr; }
+  .tool-layout { grid-template-columns:1fr; }
+  .approach-track { grid-template-columns:1fr; }
+  .at-body { grid-template-columns:1fr; }
+  .case-panel.active { grid-template-columns:1fr; }
+  .c-left { border-right:none; border-bottom:1px solid var(--border); }
+  .found-grid { grid-template-columns:1fr; }
+  .pitch-timeline { flex-direction:column; }
+  footer { flex-direction:column; gap:12px; text-align:center; }
+  .foot-right { text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">GENA</div>
+    <div class="nav-pipe">|</div>
+    <div class="nav-sub">Asthma Precision Phenotyping</div>
+  </div>
+  <div class="nav-links">
+    <a href="#problem">Problem</a>
+    <a href="#evidence">Evidence</a>
+    <a href="#approach">Approach</a>
+    <a href="#tool">Live Tool</a>
+    <a href="#cases">Cases</a>
+    <a href="#foundation">Research</a>
+    <a href="#pitch">Pitch</a>
+  </div>
+  <a href="#pitch" class="nav-badge">Request Demo</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-label">GENA × SIVOTEC &nbsp;·&nbsp; Asthma Initiative &nbsp;·&nbsp; 2025</div>
+  <h1>
+    The same patient.<br>
+    <span class="line2">Six different diagnoses.</span><br>
+    <span class="line3">One tool that tells them apart.</span>
+  </h1>
+  <div class="hero-body">
+    <p class="hero-lead">
+      Asthma is the most common chronic respiratory disease and one of the most
+      poorly phenotyped. <strong>26 million Americans receive the same stepwise protocol
+      regardless of their underlying inflammatory biology.</strong> The tools to do better
+      exist in research registries. They have never been brought to the point of care.
+      GENA changes that — from the first inhaler prescription to the final biologic selection.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="stat-n"><span class="counter" data-target="26">0</span><span class="unit">M</span></div>
+        <div class="stat-l">US asthma patients — all receiving the same stepwise protocol</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-n"><span class="unit">$</span><span class="counter" data-target="4">0</span><span class="unit">B+</span></div>
+        <div class="stat-l">Annual biologic market with no validated point-of-care selector</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-n"><span class="counter" data-target="6">0</span></div>
+        <div class="stat-l">Approved biologics — zero head-to-head trials between them</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-n"><span class="counter" data-target="0">0</span></div>
+        <div class="stat-l">Commercial phenotyping tools available across mild–severe spectrum</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue">Scroll</div>
+</section>
+
+<div class="hr"></div>
+
+<!-- SECTION 1: THE PROBLEM -->
+<section id="problem">
+<div class="w">
+  <div class="section-eyebrow reveal">
+    <span class="eyebrow-num">01</span>
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-label">The Problem</span>
+  </div>
+  <h2 class="section-h2 reveal">One protocol for <em>six diseases.</em><br><span class="muted">And the gap grows at every step.</span></h2>
+  <p class="section-lead reveal">
+    Asthma is not one disease. The same chief complaint — wheeze, dyspnea, cough — emerges from at
+    least six distinct inflammatory phenotypes with different biology, different optimal treatments,
+    and different trajectories. Current care applies a <strong>one-size-fits-all stepwise protocol</strong> at
+    every severity level, from the first SABA prescription to biologic selection. The result: patients
+    accumulate unnecessary OCS exposure, wrong medications, and years of uncontrolled disease.
+  </p>
+
+  <div class="problem-intro-grid reveal">
+    <div class="pi-cell">
+      <div class="pi-num"><span class="accent">5</span>–10<span style="font-size:24px;color:var(--teal)">%</span></div>
+      <div class="pi-desc"><strong>Have severe asthma</strong>
+        Uncontrolled despite high-dose ICS-LABA. Candidates for biologic therapy. The population everyone focuses on. But they reached severe because phenotyping failed them earlier.</div>
+    </div>
+    <div class="pi-cell">
+      <div class="pi-num"><span class="accent">~40</span><span style="font-size:24px;color:var(--teal)">%</span></div>
+      <div class="pi-desc"><strong>Have moderate persistent asthma</strong>
+        Failing Step 2–3. The critical decision point — ICS/LABA vs. ICS/LTRA vs. LAMA add-on. Wrong choice here accelerates progression to severe. Phenotype would change the decision.</div>
+    </div>
+    <div class="pi-cell">
+      <div class="pi-num"><span class="accent">~55</span><span style="font-size:24px;color:var(--teal)">%</span></div>
+      <div class="pi-desc"><strong>Have mild asthma</strong>
+        Receiving empiric first-line therapy with no phenotype assessment. FeNO and blood eosinophils at first visit would identify who needs ICS urgently — and who needs something else entirely.</div>
+    </div>
+  </div>
+
+  <div class="section-eyebrow reveal" style="margin-top:40px;margin-bottom:16px">
+    <span class="eyebrow-num">—</span>
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-label">Where GENA Fits in the GINA Step Framework</span>
+  </div>
+
+  <div class="severity-ladder reveal">
+    <div class="sev-row">
+      <div class="sev-step">
+        <div class="sev-step-label">GINA Step 1–2</div>
+        <div class="sev-step-name">Mild</div>
+        <div class="sev-step-sev">Intermittent → persistent</div>
+      </div>
+      <div class="sev-body">
+        <div class="sev-drugs">As-needed ICS-formoterol (preferred) · Low-dose ICS</div>
+        <div class="sev-phenotype">Current approach: same regimen regardless of phenotype. <em>FeNO &gt;47 ppb predicts ICS response. Low FeNO suggests LTRA or no ICS needed.</em></div>
+      </div>
+      <div class="sev-side">
+        <div class="sev-future">Phase 3 (future)</div>
+        <div style="font-size:11px;color:var(--dimmer);margin-top:4px">Evidence emerging — ahead of guidelines</div>
+      </div>
+    </div>
+    <div class="sev-row warn-row">
+      <div class="sev-step">
+        <div class="sev-step-label">GINA Step 3–4</div>
+        <div class="sev-step-name">Moderate</div>
+        <div class="sev-step-sev">Persistent → difficult</div>
+      </div>
+      <div class="sev-body">
+        <div class="sev-drugs">ICS-LABA · +LTRA · +LAMA · ±OCS courses</div>
+        <div class="sev-phenotype">T2-high: escalate ICS. T2-low: ICS escalation won't help — tiotropium, macrolides, treat comorbidities. <em>Wrong choice here drives OCS dependence.</em></div>
+      </div>
+      <div class="sev-side">
+        <div class="sev-gena">Phase 2 (growth)</div>
+        <div style="font-size:11px;color:var(--dim);margin-top:4px">ISAR algorithm adapted for primary care</div>
+      </div>
+    </div>
+    <div class="sev-row active-row">
+      <div class="sev-step">
+        <div class="sev-step-label">GINA Step 5</div>
+        <div class="sev-step-name">Severe</div>
+        <div class="sev-step-sev">Uncontrolled refractory</div>
+      </div>
+      <div class="sev-body">
+        <div class="sev-drugs">Biologic therapy: omalizumab · mepolizumab · benralizumab · dupilumab · tezepelumab · reslizumab</div>
+        <div class="sev-phenotype">Six biologics, overlapping eligibility criteria, no head-to-head trials. Plus: rare disease masqueraders (EGPA, A1AT, VCD) that make biologic selection irrelevant.</div>
+      </div>
+      <div class="sev-side">
+        <div class="sev-gena">Phase 1 (beachhead)</div>
+        <div style="font-size:11px;color:var(--teal);margin-top:4px">Strong evidence · Build here first</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="hr"></div>
+
+<!-- SECTION 2: EVIDENCE -->
+<section id="evidence">
+<div class="w">
+  <div class="section-eyebrow reveal">
+    <span class="eyebrow-num">02</span>
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-label">What the Literature Says</span>
+  </div>
+  <h2 class="section-h2 reveal">The evidence is <em>graded by severity.</em><br><span class="muted">So is the opportunity.</span></h2>
+  <p class="section-lead reveal">
+    An honest review of the evidence finds strong RCT-backed support for phenotype-guided treatment
+    at Step 5, emerging evidence at Steps 3–4, and weak-but-promising signals at Steps 1–2.
+    <strong>The research tools exist. They have never been converted to clinical products.</strong>
+    That is the gap GENA fills — starting where the evidence is strongest.
+  </p>
+
+  <div class="evidence-cols reveal">
+    <div>
+      <div class="ev-block">
+        <div class="ev-block-header">
+          <div class="ev-block-icon">🔬</div>
+          <div class="ev-block-title"><span class="ev-pill ev-a">Grade A</span> Severe Asthma — Biologic Selection</div>
+        </div>
+        <div class="ev-block-body">
+          <strong>Blood eosinophils + FeNO together are the strongest validated predictors of biologic response</strong> — better than either alone. ISAR real-world data (35,000 patients, 28 countries) confirms higher pre-biologic BEC and FeNO are associated with greater post-biologic FEV₁ improvement for anti-IgE and anti-IL-5/5R agents.
+          <span class="data-point">→ ISAR registry · CHEST 2025 · Frontiers Immunology 2024</span>
+          The ISAR eosinophil gradient algorithm (Grade 0–3) was validated in this population using: peak BEC ever, FeNO ever ≥25 ppb, nasal polyps, adult onset, and OCS use. It is the only validated multi-component phenotyping tool in asthma — and it has never been implemented as a clinical product.
+          <span class="data-point">→ CHEST 2021 · npj Primary Care Resp Med 2025</span>
+        </div>
+      </div>
+
+      <div class="ev-block">
+        <div class="ev-block-header">
+          <div class="ev-block-icon">🫁</div>
+          <div class="ev-block-title"><span class="ev-pill ev-a">Grade A</span> FeNO — ICS Response Prediction</div>
+        </div>
+        <div class="ev-block-body">
+          <strong>FeNO predicts corticosteroid responsiveness more consistently than spirometry, bronchodilator response, peak flow variation, or methacholine AHR</strong> (ATS Clinical Practice Guideline, 2011 — endorsed by AAAAI/ACAAI).
+          <span class="data-point">→ AUC 0.89 and 0.86 at 4 and 12 weeks for ICS response prediction (Smith et al.) · FeNO &lt;27 ppb predicts non-response</span>
+          RCT meta-analysis (14 trials): FeNO-guided management algorithms reduced exacerbation risk vs. no FeNO — <strong>High strength of evidence</strong> (AHRQ Comparative Effectiveness Review 197, 2017).
+          NIOX VERO device is the only commercial FeNO measurement tool — it delivers a number, with no integrated decision logic.
+          <span class="data-point">→ AHRQ CER 197 · ATS FeNO Guideline 2011 · NICE 2024</span>
+        </div>
+      </div>
+
+      <div class="ev-block">
+        <div class="ev-block-header">
+          <div class="ev-block-icon">⚠️</div>
+          <div class="ev-block-title"><span class="ev-pill ev-b">Grade B</span> Rare Disease Exclusion — Expert Consensus</div>
+        </div>
+        <div class="ev-block-body">
+          EGPA screening threshold (blood eos &gt;1,500 in asthma), A1AT exclusion criteria (basilar emphysema + normal T2 biomarkers + recurrent infections), and VCD identification (stridor + normal FeNO + spirometry pattern) are supported by expert consensus and specialty guidelines — not RCTs.
+          <span class="data-point">→ 2022 ACR/EULAR EGPA criteria · ATS A1AT statement · GINA 2024 difficult asthma guide</span>
+          No existing clinical tool systematically screens for these masqueraders before biologic selection. This is GENA's unique layer.
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="ev-block">
+        <div class="ev-block-header">
+          <div class="ev-block-icon">📊</div>
+          <div class="ev-block-title"><span class="ev-pill ev-b">Grade B</span> Moderate Asthma — Phenotype-Guided Step-Up</div>
+        </div>
+        <div class="ev-block-body">
+          <strong>The ISAR eosinophil gradient algorithm was successfully applied to a UK primary care cohort</strong> (Clinical Practice Research Datalink): eosinophilic phenotype predominates in primary care and is associated with greater severity and HCRU. "These patients may benefit from earlier and targeted therapy" (PubMed 34403837, 2021).
+          <span class="data-point">→ JACI In Practice 2021 · npj PCRM 2025</span>
+          T2-low identification at Step 3–4 is critically important: ICS escalation in T2-low patients is ineffective and may worsen neutrophilic inflammation. Tiotropium add-on shows better outcomes in non-eosinophilic phenotype. Evidence base: observational and RCT subgroup analyses — not prospective phenotype-guided RCTs.
+          <span class="data-point">→ GINA 2024 Step 4 guidance · Heaney et al.</span>
+        </div>
+      </div>
+
+      <div class="ev-block">
+        <div class="ev-block-header">
+          <div class="ev-block-icon">🌱</div>
+          <div class="ev-block-title"><span class="ev-pill ev-c">Grade C</span> Mild Asthma — Emerging Evidence</div>
+        </div>
+        <div class="ev-block-body">
+          The 2025 npj Primary Care Respiratory Medicine study adapted the ISAR algorithm for a mild asthma population: adding FeNO improved classification (C-statistic 0.978 vs 0.888 for eos alone). However, <strong>"FeNO's susceptibility to transient elevations suggests limited added value for routine clinical classification"</strong> in mild asthma.
+          <span class="data-point">→ npj PCRM Oct 2025 · GINA 2025 Appendix on T2 biomarkers</span>
+          GINA 2025 added a new appendix on T2 biomarkers across all severity levels — the clearest signal yet that guideline bodies are moving toward phenotype-guided care at every step. The evidence is ahead of the tools.
+          <span class="data-point">→ This is Phase 3 territory. GENA generates the RCT evidence through real-world data collection.</span>
+        </div>
+      </div>
+
+      <div class="ev-block">
+        <div class="ev-block-header">
+          <div class="ev-block-icon">💊</div>
+          <div class="ev-block-title"><span class="ev-pill ev-b">Grade B</span> LTRA Selection — Phenotype Matters</div>
+        </div>
+        <div class="ev-block-body">
+          Montelukast: phenotype-specific indications supported by evidence. <strong>AERD</strong> (nasal polyps + NSAID sensitivity): strong mechanistic rationale — leukotriene pathway is the primary driver. <strong>Allergic rhinitis + asthma</strong>: treats both simultaneously. <strong>Exercise-induced bronchoconstriction</strong>: superior to SABA pre-treatment in some trials. <strong>Non-allergic eosinophilic asthma</strong>: limited evidence — LTRA adds little. GINA 2024 now requires shared decision-making for LTRA due to neuropsychiatric risk — making phenotype guidance even more important.
+          <span class="data-point">→ GINA 2024/2025 · MHRA 2024 safety advice on montelukast</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-eyebrow reveal" style="margin-bottom:16px">
+    <span class="eyebrow-num">—</span>
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-label">What Exists Today — and Where It Stops</span>
+  </div>
+
+  <div class="tool-table-wrap reveal">
+    <table class="tool-table">
+      <thead>
+        <tr>
+          <th>Tool / Framework</th>
+          <th>Mild (Step 1–2)</th>
+          <th>Moderate (Step 3–4)</th>
+          <th>Severe / Biologic</th>
+          <th>Rare Disease Flag</th>
+          <th>Point-of-Care</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>NHLBI CDS Rules (2021)</td>
+          <td class="tc-partial">⬤ Step 2 transition only<br><small>No phenotype</small></td>
+          <td class="tc-partial">⬤ Step 3–4 transition only<br><small>No phenotype</small></td>
+          <td class="tc-no">✗ Stops at "consider biologic"</td>
+          <td class="tc-no">✗ None</td>
+          <td class="tc-yes">✓ EHR code available</td>
+        </tr>
+        <tr>
+          <td>GINA Guidelines (2024/2025)</td>
+          <td class="tc-partial">⬤ New T2 biomarker appendix<br><small>Framework only</small></td>
+          <td class="tc-partial">⬤ T2-high/low split<br><small>No decision algorithm</small></td>
+          <td class="tc-partial">⬤ Severe asthma guide<br><small>Describes but doesn't select</small></td>
+          <td class="tc-partial">⬤ Mentions differential<br><small>No systematic screen</small></td>
+          <td class="tc-no">✗ PDF/print only</td>
+        </tr>
+        <tr>
+          <td>NIOX VERO (FeNO device)</td>
+          <td class="tc-yes">✓ Measures FeNO</td>
+          <td class="tc-yes">✓ Measures FeNO</td>
+          <td class="tc-yes">✓ Measures FeNO</td>
+          <td class="tc-no">✗ None</td>
+          <td class="tc-partial">⬤ Hardware only<br><small>No decision logic</small></td>
+        </tr>
+        <tr>
+          <td>ISAR Algorithm (research)</td>
+          <td class="tc-partial">⬤ Adapted 2025<br><small>Not validated for clinical use</small></td>
+          <td class="tc-partial">⬤ Applied to primary care<br><small>Research cohort only</small></td>
+          <td class="tc-yes">✓ Validated (n=35,000)</td>
+          <td class="tc-no">✗ None</td>
+          <td class="tc-no">✗ Registry only<br><small>Never deployed clinically</small></td>
+        </tr>
+        <tr>
+          <td>Pharma decision trees</td>
+          <td class="tc-no">✗ Not applicable</td>
+          <td class="tc-no">✗ Not applicable</td>
+          <td class="tc-partial">⬤ Product-specific only<br><small>Omalizumab guide ignores mepolizumab</small></td>
+          <td class="tc-no">✗ None</td>
+          <td class="tc-partial">⬤ App/print<br><small>Industry-sponsored</small></td>
+        </tr>
+        <tr style="outline:1px solid rgba(0,201,167,0.2)">
+          <td class="tc-gena">GENA Asthma (proposed)</td>
+          <td class="tc-partial">⬤ Phase 3 / future<br><small>Generating evidence</small></td>
+          <td class="tc-yes">✓ Phase 2 / growth<br><small>ISAR algorithm + T2-low logic</small></td>
+          <td class="tc-yes">✓ Phase 1 / now<br><small>Full biologic selection engine</small></td>
+          <td class="tc-yes">✓ Active screening<br><small>EGPA, A1AT, VCD, CF, PCD</small></td>
+          <td class="tc-yes">✓ Point-of-care + EHR</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="gap-bar reveal">
+    <div class="gap-bar-label">The Critical Insight</div>
+    <p>The NHLBI CDS rules stop precisely where the hardest clinical decision begins. The ISAR algorithm — the most validated phenotyping tool in existence — has never been deployed as a clinical product. The NIOX VERO measures FeNO but provides no decision logic. <strong>Every piece of the evidence base exists. The clinical tool that integrates them does not.</strong></p>
+  </div>
+
+  <div class="section-eyebrow reveal" style="margin-bottom:16px">
+    <span class="eyebrow-num">—</span>
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-label">Research Tools Ready for Clinical Translation</span>
+  </div>
+
+  <div class="research-grid reveal">
+    <div class="rg-card">
+      <div class="rg-name">ISAR Eosinophil Gradient Algorithm</div>
+      <div class="rg-origin">International Severe Asthma Registry · 35,000 patients · 28 countries</div>
+      <div class="rg-desc">Multicomponent Grade 0–3 phenotyping algorithm using peak BEC, FeNO ever ≥25 ppb, nasal polyps, adult onset, and OCS use. Validated in severe asthma; successfully applied to primary care cohorts in 2021 and 2025. Consensus-built by expert committee. Free to use.</div>
+      <div class="rg-gap">Gap: Never deployed as a clinical decision support tool.</div>
+    </div>
+    <div class="rg-card">
+      <div class="rg-name">AHRQ FeNO Management Algorithms</div>
+      <div class="rg-origin">Agency for Healthcare Research and Quality · CER 197 · 14 RCTs meta-analysis</div>
+      <div class="rg-desc">Systematic review confirming FeNO-guided management reduces exacerbation risk (High SOE). Step-up, step-down, and adherence monitoring algorithms described. NIOX-specific ICS titration guidance published. Available on AHRQ CDS Connect platform.</div>
+      <div class="rg-gap">Gap: FeNO algorithm exists on paper. No integration with biologic selection or rare disease screening.</div>
+    </div>
+    <div class="rg-card">
+      <div class="rg-name">SARP / U-BIOPRED Cluster Definitions</div>
+      <div class="rg-origin">Severe Asthma Research Program · Unbiased Biomarkers for Respiratory Disease Outcome</div>
+      <div class="rg-desc">Landmark ML cluster studies establishing T2-high and T2-low endotype consistency across US and European cohorts. Identified three major clinically relevant clusters. Validated biomarker cut-points. Informs biologic trial inclusion criteria.</div>
+      <div class="rg-gap">Gap: Research models only. No clinical tool implements these clusters for real patients.</div>
+    </div>
+    <div class="rg-card">
+      <div class="rg-name">ACR/EULAR EGPA Classification Criteria</div>
+      <div class="rg-origin">American College of Rheumatology · 2022 · Vasculitis criteria</div>
+      <div class="rg-desc">2022 criteria for EGPA: validated 6-item scoring system including asthma, eosinophilia, nasal polyps, neuropathy, biopsy findings, and ANCA status. Eosinophil threshold of &gt;1,000–1,500/μL in a patient with asthma mandates EGPA evaluation.</div>
+      <div class="rg-gap">Gap: No asthma management tool systematically applies these criteria before escalating therapy.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="hr"></div>
+
+<!-- SECTION 3: APPROACH -->
+<section id="approach">
+<div class="w">
+  <div class="section-eyebrow reveal">
+    <span class="eyebrow-num">03</span>
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-label">The GENA Approach</span>
+  </div>
+  <h2 class="section-h2 reveal">The same constellation logic.<br><em>Across every step.</em></h2>
+  <p class="section-lead reveal">
+    GENA's core capability — identifying complex diagnoses from multi-system biomarker constellations —
+    applies directly across the full asthma severity spectrum. The same engine that runs at Step 5
+    builds a longitudinal phenotype record starting at Step 2. By the time a patient reaches biologic
+    consideration, GENA already knows their phenotype — <strong>because it has been tracking it.</strong>
+  </p>
+
+  <div class="reveal">
+    <div class="approach-track" style="margin-bottom:2px">
+      <div class="at-step">
+        <div class="at-step-gina">GINA Step 1–2</div>
+        <div class="at-step-name">Mild Asthma</div>
+        <div class="at-step-sev">Phase 3 — future</div>
+      </div>
+      <div class="at-body">
+        <div class="at-current">
+          <div class="at-current-label">Current approach</div>
+          <div class="at-current-text">As-needed ICS-formoterol for all. No biomarker assessment at first visit. LTRA offered as alternative with no selection criteria. Same regimen regardless of FeNO, blood eos, or atopic status.</div>
+        </div>
+        <div class="at-gena">
+          <div class="at-gena-label"><div class="gena-pulse"></div> GENA layer (Phase 3)</div>
+          <div class="at-gena-text">FeNO + blood eos at first visit identifies the ~40% of steroid-naïve patients with eosinophilic phenotype — who need ICS urgently. Low FeNO + low eos = LTRA or watchful waiting. Generates the longitudinal phenotype record that will inform every future step.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="approach-track" style="margin-bottom:2px">
+      <div class="at-step">
+        <div class="at-step-gina">GINA Step 3–4</div>
+        <div class="at-step-name">Moderate Asthma</div>
+        <div class="at-step-sev">Phase 2 — growth</div>
+      </div>
+      <div class="at-body">
+        <div class="at-current">
+          <div class="at-current-label">Current approach</div>
+          <div class="at-current-text">Escalate ICS dose. Add LABA. Then LTRA trial. Then LAMA. Then OCS if needed. No systematic phenotype assessment before each escalation. T2-low patients receive ICS escalation that will not work — and accumulate OCS exposure.</div>
+        </div>
+        <div class="at-gena">
+          <div class="at-gena-label"><div class="gena-pulse"></div> GENA layer (Phase 2)</div>
+          <div class="at-gena-text">T2-low identification at Step 3 redirects to tiotropium, macrolides, and comorbidity management — stopping the ICS escalation cycle. T2-high eosinophilic gets ICS/LABA and fast-tracked to specialist phenotyping. ISAR algorithm applied to the primary care population.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="approach-track" style="border:1px solid rgba(0,201,167,0.25)">
+      <div class="at-step" style="background:var(--teal3);border-right-color:rgba(0,201,167,0.2)">
+        <div class="at-step-gina">GINA Step 5</div>
+        <div class="at-step-name" style="color:var(--teal)">Severe Asthma</div>
+        <div class="at-step-sev" style="color:var(--teal)">Phase 1 — beachhead</div>
+      </div>
+      <div class="at-body">
+        <div class="at-current">
+          <div class="at-current-label">Current approach</div>
+          <div class="at-current-text">Refer to specialist. Check eos and FeNO. Choose biologic based on incomplete phenotyping, formulary availability, or pharma familiarity. Rare disease masqueraders (EGPA, A1AT, VCD) often not systematically excluded. Wrong biologic chosen routinely.</div>
+        </div>
+        <div class="at-gena">
+          <div class="at-gena-label"><div class="gena-pulse"></div> GENA full engine (Phase 1)</div>
+          <div class="at-gena-text">Two-layer analysis: (1) Rare disease exclusion screen before biologic selection begins. (2) ISAR-validated eosinophil gradient + FeNO + IgE + comorbidity constellation → ranked biologic recommendation with evidence citations, comorbidity modifiers, and explicit rationale.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="hr"></div>
+
+<!-- SECTION 4: LIVE TOOL -->
+<section id="tool">
+<div class="w">
+  <div class="section-eyebrow reveal">
+    <span class="eyebrow-num">04</span>
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-label">Live Phenotyping Engine</span>
+  </div>
+  <h2 class="section-h2 reveal">Enter a patient's profile.<br><em>GENA does the rest.</em></h2>
+  <p class="section-lead reveal">
+    This is a working prototype of GENA's severe asthma phenotyping engine.
+    Adjust biomarkers and toggle clinical features to see real-time endotype probability
+    analysis and ranked treatment recommendations — including rare disease alerts.
+  </p>
+
+  <div class="tool-layout reveal">
+    <div class="phenotype-form">
+      <div class="pf-header">
+        <div class="gena-pulse"></div>
+        <div class="pf-title">Patient Biomarker Profile</div>
+      </div>
+      <div class="pf-body">
+
+        <div class="pf-section">
+          <div class="pf-section-label">Inflammatory Biomarkers</div>
+          <div class="slider-row">
+            <div class="sl-label">Blood Eos (cells/μL)</div>
+            <input type="range" class="sl-input" id="sl-eos" min="0" max="2000" value="450" oninput="runGENA()">
+            <div class="sl-val" id="v-eos">450</div>
+          </div>
+          <div class="slider-row">
+            <div class="sl-label">FeNO (ppb)</div>
+            <input type="range" class="sl-input" id="sl-feno" min="0" max="120" value="58" oninput="runGENA()">
+            <div class="sl-val" id="v-feno">58</div>
+          </div>
+          <div class="slider-row">
+            <div class="sl-label">Total IgE (IU/mL)</div>
+            <input type="range" class="sl-input" id="sl-ige" min="0" max="2000" value="340" oninput="runGENA()">
+            <div class="sl-val" id="v-ige">340</div>
+          </div>
+          <div class="slider-row">
+            <div class="sl-label">FEV₁ % predicted</div>
+            <input type="range" class="sl-input" id="sl-fev1" min="20" max="100" value="68" oninput="runGENA()">
+            <div class="sl-val" id="v-fev1">68%</div>
+          </div>
+        </div>
+
+        <div class="pf-section">
+          <div class="pf-section-label">Clinical Features</div>
+          <div class="toggle-grid">
+            <div class="tog" id="t-polyps" onclick="tog('polyps')">Nasal polyps</div>
+            <div class="tog" id="t-nsaid" onclick="tog('nsaid')">NSAID sensitivity</div>
+            <div class="tog" id="t-anosmia" onclick="tog('anosmia')">Anosmia</div>
+            <div class="tog" id="t-atopy" onclick="tog('atopy')">Atopy / skin prick+</div>
+            <div class="tog" id="t-ad" onclick="tog('ad')">Atopic dermatitis</div>
+            <div class="tog" id="t-ocs" onclick="tog('ocs')">OCS dependent</div>
+            <div class="tog" id="t-adultonset" onclick="tog('adultonset')">Adult onset (&gt;18)</div>
+            <div class="tog" id="t-obese" onclick="tog('obese')">BMI &gt;35 / obese</div>
+            <div class="tog" id="t-stridor" onclick="tog('stridor')">Stridor / VCD</div>
+          </div>
+        </div>
+
+        <div class="pf-section">
+          <div class="pf-section-label">Red Flag Features</div>
+          <div class="toggle-grid">
+            <div class="tog urgent" id="t-neuro" onclick="tog('neuro')">Neuropathy</div>
+            <div class="tog urgent" id="t-purpura" onclick="tog('purpura')">Skin purpura</div>
+            <div class="tog urgent" id="t-basilar" onclick="tog('basilar')">Basilar emphysema</div>
+            <div class="tog urgent" id="t-clubbing" onclick="tog('clubbing')">Digital clubbing</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="output-panel">
+      <div class="op-header">
+        <div class="op-title">GENA Analysis</div>
+        <div class="op-status" id="gena-status">Live · updating</div>
+      </div>
+      <div class="op-body" id="gena-output">
+        <div class="op-section-label">Phenotype Probability</div>
+        <div class="phenotype-bars" id="phen-bars"></div>
+        <div class="op-divider"></div>
+        <div class="op-section-label">GENA Recommendation</div>
+        <div id="gena-rec"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="hr"></div>
+
+<!-- SECTION 5: CASES -->
+<section id="cases">
+<div class="w">
+  <div class="section-eyebrow reveal">
+    <span class="eyebrow-num">05</span>
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-label">Clinical Cases</span>
+  </div>
+  <h2 class="section-h2 reveal">Four patients. Four decisions.<br><em>One framework.</em></h2>
+  <p class="section-lead reveal">
+    Three severe asthma cases — each demonstrating a different clinical failure mode that GENA prevents.
+    Plus one moderate/T2-low case showing GENA's most counterintuitive value: <strong>preventing overtreatment.</strong>
+  </p>
+
+  <div class="case-tabs reveal">
+    <button class="case-tab-btn active" onclick="showCase('priya',this)">
+      Priya, 34F
+      <span class="t-severity">Severe · AERD missed</span>
+    </button>
+    <button class="case-tab-btn" onclick="showCase('diane',this)">
+      Diane, 52F
+      <span class="t-severity">Severe · EGPA · Life-threatening</span>
+    </button>
+    <button class="case-tab-btn" onclick="showCase('marcus',this)">
+      Marcus, 47M
+      <span class="t-severity">Severe · A1AT · 45yr delay</span>
+    </button>
+    <button class="case-tab-btn" onclick="showCase('rachel',this)">
+      Rachel, 44F
+      <span class="t-severity">Moderate · T2-low · Step-down case</span>
+    </button>
+  </div>
+
+  <!-- PRIYA / AERD -->
+  <div class="case-panel active" id="case-priya">
+    <div class="c-left">
+      <div class="c-patient-header">
+        <div class="c-avatar" style="background:var(--teal2);color:var(--teal)">P</div>
+        <div>
+          <div class="c-patient-name">Priya, 34F</div>
+          <div class="c-patient-meta">SEVERE · Teacher · Uncontrolled asthma 4yr · Failing omalizumab</div>
+        </div>
+      </div>
+      <div class="c-quote">"I've been on everything. My nose is always blocked. I can't smell anything anymore. I was in the ED twice last year."</div>
+      <div class="c-label">Current Treatment (Failing)</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--dim);line-height:1.8;margin-bottom:12px">
+        High-dose ICS/LABA · Montelukast · OCS ×4 last year<br>
+        Omalizumab ×8 months — partial response only
+      </div>
+      <div class="c-label">Biomarker Profile</div>
+      <div class="bm-row"><span class="bm-name">Blood eos (current)</span><span class="bm-val hi">680 /μL</span></div>
+      <div class="bm-row"><span class="bm-name">Blood eos (peak, pre-OCS)</span><span class="bm-val hi">1,240 /μL</span></div>
+      <div class="bm-row"><span class="bm-name">FeNO</span><span class="bm-val hi">58 ppb</span></div>
+      <div class="bm-row"><span class="bm-name">Total IgE</span><span class="bm-val">340 IU/mL</span></div>
+      <div class="bm-row"><span class="bm-name">FEV₁</span><span class="bm-val warn">62% predicted</span></div>
+      <div class="bm-row"><span class="bm-name">Nasal polyps</span><span class="bm-val hi">Bilateral — large</span></div>
+      <div class="bm-row"><span class="bm-name">Anosmia</span><span class="bm-val warn">2 years</span></div>
+      <div class="bm-row"><span class="bm-name">NSAID history</span><span class="bm-val crit">Asthma flare with ibuprofen</span></div>
+      <div class="c-miss">
+        <strong>What was missed:</strong> The treating physician saw eosinophilia and IgE → omalizumab. But anosmia + bilateral polyps + NSAID-triggered asthma + eosinophilia is the <strong>Samter's Triad (AERD)</strong>. This phenotype has a distinct treatment pathway. IgE is not the dominant mechanism. Omalizumab alone cannot address the arachidonic acid dysregulation driving the polyps and NSAID sensitivity.
+      </div>
+    </div>
+    <div class="c-right">
+      <div class="c-label">GENA Analysis</div>
+      <div class="c-gena-output">
+        <div class="c-gena-label"><div class="gena-pulse"></div> Constellation Recognition</div>
+        <div class="c-gena-text">Three concurrent signals identified: T2-high eosinophilic asthma (eos 680/1240, FeNO 58) + AERD phenotype (NSAID sensitivity + anosmia + bilateral polyps = Samter's Triad) + inadequate response to omalizumab consistent with IgE not being the dominant inflammatory pathway. The arachidonic acid pathway — not IgE — is the primary driver.</div>
+        <div class="c-gena-path">
+          T2-high eosinophilic: 84% · AERD: 89% · T2-high allergic: 41%<br>
+          ISAR Grade: 3 (most likely eosinophilic) · Rare disease: None triggered
+        </div>
+      </div>
+      <div class="c-label">GENA Recommendations</div>
+      <div class="c-recs">
+        <div class="c-rec">
+          <div class="c-rec-num">1.</div>
+          <div>
+            <div class="c-rec-name">Switch to Dupilumab (anti-IL-4Rα)</div>
+            <div class="c-rec-why">Addresses T2 eosinophilic inflammation AND has FDA approval for CRSwNP — the polyp component of AERD. LIBERTY ASTHMA QUEST + SINUS-52 trials both support this constellation. Dupilumab is the only biologic with approval for both conditions simultaneously.</div>
+          </div>
+        </div>
+        <div class="c-rec">
+          <div class="c-rec-num">2.</div>
+          <div>
+            <div class="c-rec-name">Add: Aspirin Desensitization Protocol</div>
+            <div class="c-rec-why">Directly modulates the COX-1 / leukotriene pathway driving AERD. Reduces polyp recurrence after FESS. Conducted in specialist setting under controlled conditions. Dupilumab + aspirin desensitization is the current evidence-based combination for severe AERD.</div>
+          </div>
+        </div>
+        <div class="c-rec">
+          <div class="c-rec-num">3.</div>
+          <div>
+            <div class="c-rec-name">Rhinology referral for surgical evaluation</div>
+            <div class="c-rec-why">Bilateral large polyps with anosmia are a surgical indication. Dupilumab improves post-FESS outcomes and reduces recurrence. Surgery + biologic combination is the evidence-based standard for severe CRSwNP-AERD.</div>
+          </div>
+        </div>
+      </div>
+      <div class="c-outcome">
+        <div class="c-outcome-label">Expected Impact</div>
+        <div class="c-outcome-text">At 12 months with dupilumab + aspirin desensitization: return of smell (52% in SINUS-52), polyp score reduction, OCS courses eliminated, FEV₁ improvement. The omalizumab was not wrong — it was treating the wrong dominant pathway. GENA identifies the AERD constellation at first visit.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIANE / EGPA -->
+  <div class="case-panel" id="case-diane">
+    <div class="c-left">
+      <div class="c-patient-header">
+        <div class="c-avatar" style="background:var(--coral2);color:var(--coral)">D</div>
+        <div>
+          <div class="c-patient-name">Diane, 52F</div>
+          <div class="c-patient-meta">SEVERE · Accountant · Late-onset asthma ×3yr · Currently on mepolizumab</div>
+        </div>
+      </div>
+      <div class="c-quote">"My asthma appeared out of nowhere at 49. It keeps getting worse. My feet are numb and I have a rash on my legs my dermatologist can't explain."</div>
+      <div class="c-label">History</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--dim);line-height:1.8;margin-bottom:12px">
+        Asthma dx age 49 — treated as late-onset eosinophilic<br>
+        Recurrent sinusitis · Foot numbness ×8 months<br>
+        Purpuric rash bilateral lower legs ×4 months<br>
+        14 lbs unintentional weight loss / 6 months
+      </div>
+      <div class="c-label">Biomarker Profile</div>
+      <div class="bm-row"><span class="bm-name">Blood eos</span><span class="bm-val crit">1,840 /μL</span></div>
+      <div class="bm-row"><span class="bm-name">FeNO</span><span class="bm-val hi">72 ppb</span></div>
+      <div class="bm-row"><span class="bm-name">p-ANCA / MPO</span><span class="bm-val crit">POSITIVE</span></div>
+      <div class="bm-row"><span class="bm-name">ESR / CRP</span><span class="bm-val crit">ESR 88 · CRP 4.2</span></div>
+      <div class="bm-row"><span class="bm-name">Skin biopsy</span><span class="bm-val crit">Eosinophilic vasculitis</span></div>
+      <div class="bm-row"><span class="bm-name">Nerve conduction</span><span class="bm-val crit">Mononeuritis multiplex</span></div>
+      <div class="bm-row"><span class="bm-name">Weight loss</span><span class="bm-val crit">14 lbs / 6 months</span></div>
+      <div class="c-miss">
+        <strong>Life-threatening diagnosis missed:</strong> Diane was started on mepolizumab for "late-onset eosinophilic asthma." Blood eos &gt;1,500 + asthma + sinusitis + mononeuritis multiplex + purpuric rash + p-ANCA positive + eosinophilic vasculitis on biopsy = <strong>EGPA (Churg-Strauss syndrome)</strong>. This is a systemic vasculitis. Inadequate treatment causes permanent neuropathy, cardiac EGPA, and death.
+      </div>
+    </div>
+    <div class="c-right">
+      <div class="c-label">GENA Analysis</div>
+      <div class="c-gena-output" style="background:var(--coral2);border-color:rgba(232,84,84,0.2)">
+        <div class="c-gena-label" style="color:var(--coral)"><div class="gena-pulse" style="background:var(--coral)"></div> URGENT ALERT — EGPA</div>
+        <div class="c-gena-text"><strong style="color:var(--coral)">⚠ This is not asthma:</strong> Blood eosinophils &gt;1,500 in a patient with late-onset asthma triggers mandatory EGPA screening. Diane meets 2022 ACR/EULAR criteria for EGPA: asthma + eosinophilia &gt;1,000 + mononeuritis multiplex + purpuric rash with eosinophilic vasculitis + sinusitis. Mepolizumab is used in EGPA — but as OCS-sparing maintenance after remission induction, not as primary treatment. She has active vasculitis. The window for preventing permanent neuropathy is closing.</div>
+        <div class="c-gena-path" style="background:rgba(232,84,84,0.1);color:var(--coral)">
+          EGPA criteria met: 4/6 ACR/EULAR · Organ-threatening: neuropathy + vasculitis<br>
+          Eos 1,840 THRESHOLD EXCEEDED · Rare disease flag: ACTIVE
+        </div>
+      </div>
+      <div class="c-label">GENA Recommendations</div>
+      <div class="c-recs">
+        <div class="c-rec">
+          <div class="c-rec-num urgent">!</div>
+          <div>
+            <div class="c-rec-name" style="color:var(--coral)">URGENT: Rheumatology referral — same day</div>
+            <div class="c-rec-why">Active EGPA with mononeuritis multiplex requires induction with high-dose corticosteroids ± cyclophosphamide or rituximab. Permanent neuropathy risk increases each week without induction therapy. Do not continue mepolizumab as sole agent.</div>
+          </div>
+        </div>
+        <div class="c-rec">
+          <div class="c-rec-num">2.</div>
+          <div>
+            <div class="c-rec-name">Induction: High-dose corticosteroids + rituximab</div>
+            <div class="c-rec-why">2021 ANCA Vasculitis guidelines support rituximab for EGPA induction in ANCA-positive patients. Cyclophosphamide is alternative for severe organ involvement.</div>
+          </div>
+        </div>
+        <div class="c-rec">
+          <div class="c-rec-num">3.</div>
+          <div>
+            <div class="c-rec-name">Maintenance: Mepolizumab (after remission)</div>
+            <div class="c-rec-why">Mepolizumab IS FDA-approved for EGPA — as maintenance therapy after induction remission is achieved (MIRRA trial). Diane's current use is premature. Sequence matters.</div>
+          </div>
+        </div>
+      </div>
+      <div class="c-outcome">
+        <div class="c-outcome-label">GENA Impact — Stakes Framing</div>
+        <div class="c-outcome-text">EGPA with untreated mononeuritis multiplex causes permanent neuropathy within months. GENA's eosinophil threshold (&gt;1,500 = mandatory EGPA screen) caught this before permanent damage. Without the alert, Diane continues mepolizumab for 6 more months while her neuropathy becomes irreversible. GENA's rare disease layer is the only clinical tool that applies ACR/EULAR criteria before escalating asthma therapy.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARCUS / A1AT -->
+  <div class="case-panel" id="case-marcus">
+    <div class="c-left">
+      <div class="c-patient-header">
+        <div class="c-avatar" style="background:var(--amber2);color:var(--amber)">M</div>
+        <div>
+          <div class="c-patient-name">Marcus, 47M</div>
+          <div class="c-patient-meta">SEVERE · Electrician · "Asthma" since age 2 · 8 hospitalizations</div>
+        </div>
+      </div>
+      <div class="c-quote">"I've had asthma my whole life. Nothing works. I'm losing weight and I can't keep up at work anymore."</div>
+      <div class="c-label">History</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--dim);line-height:1.8;margin-bottom:12px">
+        "Severe persistent asthma" since age 2 — never controlled<br>
+        8 hospitalizations · Pseudomonas at every admission<br>
+        Father: "COPD" died age 58 · Never worked up<br>
+        No newborn A1AT screening
+      </div>
+      <div class="c-label">Biomarker Profile</div>
+      <div class="bm-row"><span class="bm-name">Blood eos</span><span class="bm-val">180 /μL — NORMAL</span></div>
+      <div class="bm-row"><span class="bm-name">FeNO</span><span class="bm-val">18 ppb — NORMAL</span></div>
+      <div class="bm-row"><span class="bm-name">Total IgE</span><span class="bm-val">82 IU/mL — normal</span></div>
+      <div class="bm-row"><span class="bm-name">FEV₁</span><span class="bm-val crit">44% predicted</span></div>
+      <div class="bm-row"><span class="bm-name">FEV₁/FVC ratio</span><span class="bm-val crit">0.58 — obstructive</span></div>
+      <div class="bm-row"><span class="bm-name">CT chest</span><span class="bm-val crit">Basilar emphysema</span></div>
+      <div class="bm-row"><span class="bm-name">Digital clubbing</span><span class="bm-val crit">Present</span></div>
+      <div class="bm-row"><span class="bm-name">Recurrent pneumonias</span><span class="bm-val warn">Pseudomonas ×3 / 5yr</span></div>
+      <div class="c-miss">
+        <strong>What was missed:</strong> Normal eosinophils + normal FeNO + normal IgE = this is <strong>not T2-high asthma</strong>. Basilar-predominant emphysema (not apical, as in smoking-related COPD) + Pseudomonas + digital clubbing + FEV₁ 44% + father with "COPD" at 58 = <strong>Alpha-1 Antitrypsin Deficiency</strong>. No biologic will help Marcus. The diagnosis must change first.
+      </div>
+    </div>
+    <div class="c-right">
+      <div class="c-label">GENA Analysis</div>
+      <div class="c-gena-output" style="background:var(--amber2);border-color:rgba(232,160,32,0.2)">
+        <div class="c-gena-label" style="color:var(--amber)"><div class="gena-pulse" style="background:var(--amber)"></div> Rare Disease Flag — A1AT</div>
+        <div class="c-gena-text">Marcus's profile does not fit any asthma endotype. All T2 biomarkers are normal (eos 180, FeNO 18, IgE 82). CT shows basilar-predominant emphysema — incompatible with smoking-related COPD. Recurrent Pseudomonas + digital clubbing + FEV₁ 44% + early-onset family "COPD" + basilar emphysema = <strong>Alpha-1 Antitrypsin Deficiency (SERPINA1)</strong> until serum A1AT level and genotype are obtained. Do not select a biologic. The diagnosis is wrong.</div>
+        <div class="c-gena-path" style="background:rgba(232,160,32,0.1);color:var(--amber)">
+          NOT T2-HIGH ASTHMA — Normal T2 profile confirmed<br>
+          Rare disease flag: A1AT DEFICIENCY — SERPINA1 ZZ/SZ suspected
+        </div>
+      </div>
+      <div class="c-label">GENA Recommendations</div>
+      <div class="c-recs">
+        <div class="c-rec">
+          <div class="c-rec-num urgent">!</div>
+          <div>
+            <div class="c-rec-name" style="color:var(--amber)">Order: Serum A1AT level + SERPINA1 genotype now</div>
+            <div class="c-rec-why">ZZ genotype (A1AT &lt;57 mg/dL) = severe deficiency. Treatment: IV augmentation therapy. This is not asthma. Halt biologic workup. A1AT level costs ~$50. A biologic course costs ~$20,000/year and will achieve nothing.</div>
+          </div>
+        </div>
+        <div class="c-rec">
+          <div class="c-rec-num">2.</div>
+          <div>
+            <div class="c-rec-name">Refer to Pulmonology + Genetics</div>
+            <div class="c-rec-why">A1AT deficiency requires augmentation therapy dosing, transplant eligibility assessment if FEV₁ progresses, and genetic counseling. Marcus's father's "COPD" at age 58 was almost certainly undiagnosed A1AT deficiency.</div>
+          </div>
+        </div>
+        <div class="c-rec">
+          <div class="c-rec-num">3.</div>
+          <div>
+            <div class="c-rec-name">Family cascade testing</div>
+            <div class="c-rec-why">SERPINA1 is autosomal codominant. Both parents were carriers or affected. Siblings have 25% chance of ZZ genotype. Children have 50% carrier risk. This single diagnosis cascades through the family.</div>
+          </div>
+        </div>
+      </div>
+      <div class="c-outcome">
+        <div class="c-outcome-label">GENA Impact</div>
+        <div class="c-outcome-text">GENA stops the biologic selection process before an ineffective $20,000/year treatment is initiated. Marcus needs augmentation therapy for A1AT deficiency — not a biologic. His 45-year diagnostic delay ends here. His father's death from "COPD" at 58 is retroactively explained. His children can be tested before symptoms develop.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RACHEL / T2-LOW OVERTREATMENT -->
+  <div class="case-panel" id="case-rachel">
+    <div class="c-left">
+      <div class="c-patient-header">
+        <div class="c-avatar" style="background:var(--blue2);color:var(--blue)">R</div>
+        <div>
+          <div class="c-patient-name">Rachel, 44F</div>
+          <div class="c-patient-meta">MODERATE · Office manager · "Difficult asthma" · BMI 39</div>
+        </div>
+      </div>
+      <div class="c-quote">"I've been on the highest dose of everything and I still can't breathe right. My last doctor said I was a 'difficult asthma patient.'"</div>
+      <div class="c-label">History</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--dim);line-height:1.8;margin-bottom:12px">
+        Asthma dx age 38 — poorly controlled despite high-dose therapy<br>
+        High-dose ICS-LABA 4 years · OCS ×3 last year · GERD on PPI<br>
+        No atopy on testing · No family Hx of asthma · No rhinitis<br>
+        Gained 28 lbs since asthma diagnosis
+      </div>
+      <div class="c-label">Biomarker Profile</div>
+      <div class="bm-row"><span class="bm-name">Blood eos</span><span class="bm-val">90 /μL — normal</span></div>
+      <div class="bm-row"><span class="bm-name">FeNO</span><span class="bm-val">14 ppb — normal</span></div>
+      <div class="bm-row"><span class="bm-name">Total IgE</span><span class="bm-val">48 IU/mL — normal</span></div>
+      <div class="bm-row"><span class="bm-name">FEV₁</span><span class="bm-val warn">72% predicted</span></div>
+      <div class="bm-row"><span class="bm-name">Bronchodilator response</span><span class="bm-val">8% — minimal</span></div>
+      <div class="bm-row"><span class="bm-name">BMI</span><span class="bm-val warn">39 — class II obesity</span></div>
+      <div class="bm-row"><span class="bm-name">GERD symptoms</span><span class="bm-val warn">Significant — undertreated</span></div>
+      <div class="bm-row"><span class="bm-name">Skin prick / specific IgE</span><span class="bm-val">All negative</span></div>
+      <div class="c-miss">
+        <strong>What was being planned:</strong> Rachel's previous physician was about to start mepolizumab for "refractory eosinophilic asthma." But eos 90 + FeNO 14 + IgE 48 is a <strong>T2-low profile</strong>. This patient's asthma is driven by obesity-related mechanical restriction, GERD aspiration, and deconditioning — not eosinophilic inflammation. Mepolizumab would achieve nothing. The ICS dose should come <em>down</em>, not up.
+      </div>
+    </div>
+    <div class="c-right">
+      <div class="c-label">GENA Analysis</div>
+      <div class="c-gena-output" style="background:var(--blue2);border-color:rgba(77,157,224,0.2)">
+        <div class="c-gena-label" style="color:var(--blue)"><div class="gena-pulse" style="background:var(--blue)"></div> T2-Low Phenotype — Overtreatment Alert</div>
+        <div class="c-gena-text">Rachel's T2 biomarker profile is entirely normal: eos 90, FeNO 14, IgE 48, no atopy. High-dose ICS-LABA in a T2-low patient is ineffective and causes OCS-related toxicity without addressing the underlying drivers. GENA identifies obesity-driven non-T2 asthma: mechanical restriction, GERD aspiration, deconditioning, and possible non-eosinophilic neutrophilic component. A biologic is not indicated. <strong>Step-down is the correct direction.</strong></div>
+        <div class="c-gena-path" style="background:rgba(77,157,224,0.08);color:var(--blue)">
+          T2-low phenotype: 88% · T2-high: 6% · Rare disease: None<br>
+          ISAR Grade: 0 (non-eosinophilic) · Biologic: NOT indicated
+        </div>
+      </div>
+      <div class="c-label">GENA Recommendations</div>
+      <div class="c-recs">
+        <div class="c-rec">
+          <div class="c-rec-num">1.</div>
+          <div>
+            <div class="c-rec-name">Step-DOWN ICS to medium dose + optimize GERD</div>
+            <div class="c-rec-why">High-dose ICS in a T2-low patient provides no additional benefit and causes systemic side effects. Step-down is evidence-based when eos &lt;150 and FeNO &lt;20. Optimizing GERD (PPI dose + dietary modification + head-of-bed elevation) addresses one major driver.</div>
+          </div>
+        </div>
+        <div class="c-rec">
+          <div class="c-rec-num">2.</div>
+          <div>
+            <div class="c-rec-name">Structured weight loss program (5–10% weight reduction)</div>
+            <div class="c-rec-why">Obesity-driven asthma responds to weight loss — not ICS escalation. 5–10% weight reduction improves FEV₁, reduces exacerbations, and decreases OCS dependence in obese patients with asthma. This is the most powerful intervention available for this patient.</div>
+          </div>
+        </div>
+        <div class="c-rec">
+          <div class="c-rec-num">3.</div>
+          <div>
+            <div class="c-rec-name">Add tiotropium (LAMA) as step 4 add-on</div>
+            <div class="c-rec-why">Tiotropium shows benefit in non-eosinophilic asthma where LABA alone is insufficient. Addresses the bronchodilator component without adding more anti-inflammatory therapy that won't work for this phenotype.</div>
+          </div>
+        </div>
+      </div>
+      <div class="c-outcome">
+        <div class="c-outcome-label">GENA's Most Counterintuitive Value</div>
+        <div class="c-outcome-text">Rachel was about to receive a $20,000/year biologic for a non-T2 phenotype where it has no evidence of benefit. GENA prevented overtreatment. The cost saving is immediate; the clinical benefit (step-down + weight loss) is more durable than any medication escalation would have been. GENA's value is not only in catching rare diseases — it is in preventing the wrong treatment for the right disease.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="hr"></div>
+
+<!-- SECTION 6: FOUNDATION -->
+<section id="foundation">
+<div class="w">
+  <div class="section-eyebrow reveal">
+    <span class="eyebrow-num">06</span>
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-label">Research Foundation</span>
+  </div>
+  <h2 class="section-h2 reveal">Built on validated research.<br><em>Deployed for the first time.</em></h2>
+  <p class="section-lead reveal">
+    GENA Asthma does not invent new science. It operationalizes validated research frameworks
+    that have never been implemented as clinical tools. Each building block has a published evidence base
+    and a documented gap between research deployment and clinical use.
+  </p>
+
+  <div class="found-grid reveal">
+    <div class="found-card">
+      <div class="found-card-icon">📊</div>
+      <div class="found-card-study">ISAR · 35,000 patients · 28 countries · 2017–2024</div>
+      <div class="found-card-title">Eosinophil Gradient Algorithm</div>
+      <div class="found-card-text">Expert-consensus multicomponent phenotyping tool: Grade 0–3 eosinophilic likelihood based on peak BEC, FeNO ≥25 ppb, nasal polyps, adult onset, OCS use. Validated in severe asthma cohort (n=1,716). Applied to UK primary care (n=multiple large cohorts). Free to use.</div>
+      <div class="found-card-finding">→ Grade 3: eos ≥300 + FeNO ≥25 ppb + polyps + adult onset = highest eosinophilic likelihood. Predicts biologic response.</div>
+      <div class="found-card-gap">Gap: Algorithm described in CHEST 2021. Never deployed as a clinical product in any EHR or point-of-care tool.</div>
+    </div>
+    <div class="found-card">
+      <div class="found-card-icon">💨</div>
+      <div class="found-card-study">ATS 2011 · AHRQ CER 197 · 14 RCTs · High SOE</div>
+      <div class="found-card-title">FeNO Management Algorithms</div>
+      <div class="found-card-text">FeNO-guided management reduces exacerbation risk vs. usual care (14 RCTs, High SOE). FeNO &gt;47 ppb predicts ICS response (AUC 0.89 at 4 weeks). FeNO &lt;27 ppb predicts non-response. Change of &gt;10 ppb or &gt;20% = clinically significant. ICS suppresses FeNO in days — useful for adherence monitoring.</div>
+      <div class="found-card-finding">→ FeNO persistently high despite ICS = non-adherence OR biologic-eligible steroid-resistant T2 inflammation.</div>
+      <div class="found-card-gap">Gap: NIOX VERO delivers a number. No device integrates FeNO into a step-decision algorithm at the point of care.</div>
+    </div>
+    <div class="found-card">
+      <div class="found-card-icon">🔬</div>
+      <div class="found-card-study">SARP · U-BIOPRED · ADEPT · Large RCT meta-analyses</div>
+      <div class="found-card-title">Endotype Cluster Definitions</div>
+      <div class="found-card-text">Consistent T2-high / T2-low cluster definitions across three independent research programs. T2-high: early allergic, late eosinophilic. T2-low: neutrophilic, obesity-driven, mixed. Biomarker cut-points validated. These define the treatment response boundaries used in biologic trial inclusion criteria.</div>
+      <div class="found-card-finding">→ T2-low patients show worse ICS response, better tiotropium response, and are biologic non-responders to IL-5/IL-13 agents.</div>
+      <div class="found-card-gap">Gap: Research cluster definitions. No clinical tool implements them for individual patients at the point of care.</div>
+    </div>
+    <div class="found-card">
+      <div class="found-card-icon">⚠️</div>
+      <div class="found-card-study">ACR/EULAR 2022 · GINA Difficult Asthma Guide · ATS A1AT Statement</div>
+      <div class="found-card-title">Rare Disease Threshold Rules</div>
+      <div class="found-card-text">Validated screening criteria for EGPA (eos &gt;1,000–1,500 + organ involvement in asthma patient), A1AT deficiency (basilar emphysema + normal T2 + recurrent infections + family COPD), and VCD/ILO (stridor + normal FeNO + spirometry pattern). Published in specialty guidelines.</div>
+      <div class="found-card-finding">→ Applying these criteria before biologic initiation changes the clinical decision in 3–5% of "severe asthma" patients — but those cases have the highest stakes.</div>
+      <div class="found-card-gap">Gap: No asthma management tool systematically applies rare disease criteria before escalating therapy.</div>
+    </div>
+    <div class="found-card">
+      <div class="found-card-icon">💊</div>
+      <div class="found-card-study">CHEST 2025 · JACI In Practice 2023 · LIBERTY ASTHMA trials</div>
+      <div class="found-card-title">Biologic Selection Evidence Matrix</div>
+      <div class="found-card-text">Individual biologic trial data + real-world outcomes (ISAR) + expert consensus frameworks (CHEST 2025 "How I Do It" series) provide a structured basis for ranked biologic selection. No head-to-head trials exist. Evidence is biomarker-stratified subgroup analysis + real-world registry data.</div>
+      <div class="found-card-finding">→ Higher pre-biologic BEC + FeNO → greater post-biologic FEV₁ improvement for anti-IgE and anti-IL-5/5R. ISAR real-world confirmation.</div>
+      <div class="found-card-gap">Gap: Evidence exists in papers and expert opinion. No tool synthesizes it into a ranked recommendation with explicit rationale.</div>
+    </div>
+    <div class="found-card">
+      <div class="found-card-icon">📱</div>
+      <div class="found-card-study">GINA 2025 · NHLBI CDS Connect · AHRQ</div>
+      <div class="found-card-title">EHR Integration Infrastructure</div>
+      <div class="found-card-text">NHLBI published CDS Connect rules for Steps 2–5 transitions in HL7 FHIR-compatible format. This infrastructure is built. The Step 2–5 rules are deployed. The biologic selection layer — where GENA lives — was explicitly out of scope for the original NHLBI project.</div>
+      <div class="found-card-finding">→ GENA's Step 5 layer plugs into existing CDS Connect infrastructure as the extension the NHLBI project explicitly left out.</div>
+      <div class="found-card-gap">Gap: CDS Connect implementation for biologic selection and rare disease exclusion: zero. This is the build.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="hr"></div>
+
+<!-- SECTION 7: PITCH -->
+<section id="pitch">
+<div class="w">
+  <div class="section-eyebrow reveal">
+    <span class="eyebrow-num">07</span>
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-label">The Partnership Pitch</span>
+  </div>
+  <h2 class="section-h2 reveal">Build where the evidence is.<br><em>Expand where it's heading.</em></h2>
+  <p class="section-lead reveal">
+    GENA's rare disease constellation engine — already validated in genetic disease identification —
+    is the right foundation for asthma phenotyping. The beachhead is severe asthma, where the evidence
+    is strongest and the commercial case is clearest. The growth story extends to every patient
+    with asthma, at every step, starting at first diagnosis.
+  </p>
+
+  <div class="pitch-timeline reveal">
+    <div class="pt-phase current">
+      <div class="pt-num">01</div>
+      <div class="pt-title">Severe Asthma Beachhead</div>
+      <div class="pt-text">GENA Step 5 engine: rare disease exclusion + ISAR-validated eosinophil gradient + ranked biologic recommendation. Specialty asthma clinic pilot. Strong evidence, clear regulatory pathway, measurable ROI.</div>
+      <div class="pt-tag now">Build now</div>
+    </div>
+    <div class="pt-phase">
+      <div class="pt-num">02</div>
+      <div class="pt-title">Moderate Asthma Expansion</div>
+      <div class="pt-text">T2-low identification at Step 3–4 prevents ICS escalation cycles. ISAR algorithm adapted for primary care. PCP-facing tool: phenotype assessment + specialist referral package. Prevent OCS accumulation before it starts.</div>
+      <div class="pt-tag soon">12–18 months</div>
+    </div>
+    <div class="pt-phase">
+      <div class="pt-num">03</div>
+      <div class="pt-title">Evidence Generation Layer</div>
+      <div class="pt-text">GENA's de-identified dataset becomes the first real-world phenotype-to-outcome evidence base across severity. Validates mild asthma phenotyping. Generates the RCT evidence that guidelines need. Creates publication and regulatory asset pipeline.</div>
+      <div class="pt-tag soon">18–36 months</div>
+    </div>
+    <div class="pt-phase">
+      <div class="pt-num">04</div>
+      <div class="pt-title">Mild Asthma + First Prescription</div>
+      <div class="pt-text">FeNO-guided ICS initiation and LTRA selection for newly diagnosed patients. The longitudinal phenotype record starts at diagnosis. By the time a patient reaches Step 5, GENA already knows their phenotype history.</div>
+      <div class="pt-tag future">36+ months</div>
+    </div>
+  </div>
+
+  <div class="pitch-close reveal">
+    <div class="pitch-close-eyebrow">GENA × SIVOTEC &nbsp;·&nbsp; The Build</div>
+    <h2>
+      The evidence is documented.<br>
+      The tools are in journals.<br>
+      <em>The product does not exist.</em>
+    </h2>
+    <p>
+      GENA's constellation-recognition engine is the right foundation for the right problem.
+      The ISAR algorithm has never been deployed. The FeNO algorithms have no decision logic.
+      The rare disease thresholds are in specialty guidelines no allergist has time to memorize.
+      GENA operationalizes all of it — starting where the evidence is strongest, building toward
+      the full spectrum.
+    </p>
+    <a href="mailto:gena@sivotec.com" class="pitch-btn">Request a Conversation →</a>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="foot-left"><strong>GENA</strong> Asthma Precision Phenotyping · SIVOTEC · 2025</div>
+  <div class="foot-right">For educational and demonstration purposes. Clinical decisions require physician judgment and assessment of individual patient circumstances. Not FDA-cleared as a medical device. Evidence grades reflect published literature as of 2025.</div>
+</footer>
+
+<script>
+// ── COUNTER ANIMATION ──
+function animateCounter(el) {
+  const t = parseInt(el.dataset.target);
+  const dur = 1400;
+  const start = performance.now();
+  function step(now) {
+    const p = Math.min((now - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(ease * t);
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+document.querySelectorAll('.hero .counter').forEach(el => {
+  setTimeout(() => animateCounter(el), 600);
+});
+
+// ── SCROLL REVEAL ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      e.target.querySelectorAll('.counter').forEach(animateCounter);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// ── CASE TABS ──
+function showCase(id, btn) {
+  document.querySelectorAll('.case-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.case-tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('case-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ── LIVE TOOL ──
+const feats = {};
+function tog(f) {
+  feats[f] = !feats[f];
+  const el = document.getElementById('t-' + f);
+  if (el) el.classList.toggle('on', feats[f]);
+  runGENA();
+}
+
+function fmtVal(id, val, unit) {
+  const el = document.getElementById('v-' + id);
+  if (!el) return;
+  el.textContent = val + (unit || '');
+  const n = parseFloat(val);
+  el.className = 'sl-val';
+  if (id === 'eos') {
+    if (n > 1500) el.classList.add('crit');
+    else if (n > 500) el.classList.add('warn');
+    else if (n > 150) el.classList.add('hi');
+  } else if (id === 'feno') {
+    if (n > 50) el.classList.add('warn');
+    else if (n > 25) el.classList.add('hi');
+  } else if (id === 'ige') {
+    if (n > 1000) el.classList.add('crit');
+    else if (n > 400) el.classList.add('warn');
+    else if (n > 150) el.classList.add('hi');
+  } else if (id === 'fev1') {
+    if (n < 50) el.classList.add('crit');
+    else if (n < 70) el.classList.add('warn');
+  }
+}
+
+function runGENA() {
+  const eos = parseInt(document.getElementById('sl-eos').value);
+  const feno = parseInt(document.getElementById('sl-feno').value);
+  const ige = parseInt(document.getElementById('sl-ige').value);
+  const fev1 = parseInt(document.getElementById('sl-fev1').value);
+
+  fmtVal('eos', eos);
+  fmtVal('feno', feno);
+  fmtVal('ige', ige);
+  fmtVal('fev1', fev1, '%');
+
+  // Flags
+  const egpa = eos > 1500 && (feats.neuro || feats.purpura);
+  const a1at = eos < 200 && feno < 22 && feats.basilar && feats.clubbing;
+  const vcd  = feats.stridor && feno < 20 && eos < 200;
+  const aerd = feats.nsaid && feats.polyps;
+
+  // Probabilities
+  let bars = [];
+  let recs = '';
+  let alert = '';
+  let insight = '';
+
+  if (egpa) {
+    bars = [
+      { label:'⚠ EGPA (vasculitis)', pct:92, cls:'coral' },
+      { label:'T2-high eosinophilic', pct:Math.min(75,Math.round(eos/22)), cls:'' },
+      { label:'T2-low / other', pct:5, cls:'amber' }
+    ];
+    alert = '<div class="alert-box"><div class="alert-box-label">RARE DISEASE — URGENT</div><div class="alert-box-text">Eos >1,500 + organ involvement (neuropathy / purpura) = EGPA screening mandatory. Apply 2022 ACR/EULAR criteria. Do not escalate asthma biologic without vasculitis exclusion. Rheumatology referral same day.</div></div>';
+    recs = rec('!','coral','Rheumatology referral — same day','Active EGPA requires induction with high-dose corticosteroids ± rituximab. Permanent neuropathy risk increases each week.') +
+           rec('2','','Rituximab (ANCA-positive EGPA)','2021 ANCA Vasculitis guidelines: preferred induction agent in ANCA-positive patients.') +
+           rec('3','','Mepolizumab — after remission only','MIRRA trial: mepolizumab for EGPA maintenance. Initiate only after remission is achieved with induction.');
+  } else if (a1at) {
+    bars = [
+      { label:'⚠ A1AT deficiency', pct:85, cls:'amber' },
+      { label:'NOT T2-high asthma', pct:88, cls:'coral' },
+      { label:'T2-high (any)', pct:8, cls:'amber' }
+    ];
+    alert = '<div class="alert-box" style="border-color:var(--amber);background:var(--amber2)"><div class="alert-box-label" style="color:var(--amber)">RARE DISEASE FLAG</div><div class="alert-box-text">Normal T2 profile (eos <200, FeNO <22) + basilar emphysema + digital clubbing = A1AT deficiency until proven otherwise. Halt biologic workup. Order serum A1AT level + SERPINA1 genotype.</div></div>';
+    recs = rec('!','amber','Order: Serum A1AT + SERPINA1 genotype','ZZ genotype = severe deficiency. Treatment is IV augmentation therapy — not a biologic. This costs $50. A biologic costs $20,000/year and will achieve nothing for A1AT deficiency.') +
+           rec('2','','Pulmonology + Genetics referral','Augmentation therapy dosing, transplant eligibility, and family cascade testing.') +
+           rec('3','','Family cascade testing','SERPINA1 autosomal codominant. Siblings 25% ZZ risk. Family history of "COPD" = likely undiagnosed A1AT.');
+  } else if (vcd) {
+    bars = [
+      { label:'Inducible laryngeal obstruction', pct:80, cls:'amber' },
+      { label:'T2-high asthma (co-existing)', pct:18, cls:'' },
+      { label:'T2-low asthma', pct:12, cls:'amber' }
+    ];
+    insight = '<div class="gena-insight-box" style="background:var(--amber2);border-color:rgba(232,160,32,0.2)"><div class="gib-label" style="color:var(--amber)"><div class="gena-pulse" style="background:var(--amber)"></div> Masquerader Alert</div><div class="gib-text">Normal eos + normal FeNO + stridor pattern. This presentation is consistent with inducible laryngeal obstruction (VCD). Laryngoscopy during symptomatic episode is diagnostic. Refer to speech-language pathology before biologic initiation.</div></div>';
+    recs = rec('1','','Speech-language pathology referral','Laryngoscopic confirmation + inspiratory flow training. Do not escalate inhaler therapy before this diagnosis is excluded.') +
+           rec('2','','Laryngoscopy during symptomatic episode','Gold standard. Flow-volume loop showing inspiratory flattening is supportive but not diagnostic alone.');
+  } else if (eos < 150 && feno < 20 && !feats.atopy) {
+    // T2-low
+    const obese = feats.obese;
+    bars = [
+      { label:'T2-low / non-eosinophilic', pct:82, cls:'amber' },
+      { label:'Obesity-driven (if BMI >35)', pct: obese ? 70 : 20, cls:'blue' },
+      { label:'T2-high (any subtype)', pct:9, cls:'' }
+    ];
+    insight = '<div class="gena-insight-box"><div class="gib-label"><div class="gena-pulse"></div> T2-Low Phenotype Identified</div><div class="gib-text">Normal T2 biomarkers confirm non-eosinophilic asthma. ICS escalation is unlikely to improve outcomes and may worsen neutrophilic inflammation. Address treatable traits: ' + (obese ? 'obesity (weight loss is the most powerful intervention), ' : '') + 'GERD, deconditioning, occupational exposures.</div><div class="gib-path">Step down ICS if feasible · Add tiotropium · ' + (obese ? 'Weight loss program' : 'Macrolide if neutrophilic') + '</div></div>';
+    recs = rec('1','','Step-down ICS + tiotropium add-on','T2-low patients do not respond to ICS escalation. Tiotropium shows benefit in non-eosinophilic asthma. Reduce OCS burden.') +
+           (obese ? rec('2','','Structured weight loss program','5–10% weight reduction improves FEV₁ and reduces exacerbations in obesity-driven asthma. Most powerful intervention for this phenotype.') : rec('2','','Low-dose azithromycin (if neutrophilic)','AMAZES trial: azithromycin reduces exacerbations in non-eosinophilic asthma. Sputum eosinophil assessment warranted.')) +
+           rec('3','','Optimize comorbidities','GERD treatment, allergen avoidance if any sensitization, smoking cessation, occupational exposure review.');
+  } else {
+    // T2-high — compute phenotype
+    const eosPct  = Math.min(94, Math.round(35 + eos/20 + feno/3));
+    const allergPct = Math.min(88, Math.round(20 + ige/22 + (feats.atopy?25:0) + (feats.ad?18:0)));
+    const aerdPct = aerd ? Math.min(90, 58 + (eos>400?18:0) + (feats.anosmia?14:0)) : 0;
+    const lowPct  = Math.max(4, 85 - eosPct * 0.7);
+
+    bars = [
+      { label:'T2-high eosinophilic', pct:Math.max(0,eosPct), cls:'' },
+      { label:'T2-high allergic', pct:Math.max(0,allergPct), cls:'blue' },
+      aerd ? { label:'AERD (Samter\'s Triad)', pct:aerdPct, cls:'' } : null,
+      { label:'T2-low / non-T2', pct:Math.max(3,lowPct), cls:'amber' }
+    ].filter(Boolean);
+
+    // ISAR grade
+    let isarGrade = 0;
+    if (eos >= 300) isarGrade++;
+    if (eos >= 150 && eos < 300) isarGrade += 0.5;
+    if (feno >= 25) isarGrade++;
+    if (feats.polyps) isarGrade++;
+    if (feats.adultonset) isarGrade++;
+    const grade = Math.min(3, Math.round(isarGrade));
+
+    insight = '<div class="gena-insight-box"><div class="gib-label"><div class="gena-pulse"></div> GENA · ISAR Gradient Analysis</div><div class="gib-text">T2-high phenotype confirmed.' + (aerd ? ' AERD constellation identified — NSAID sensitivity + polyps = Samter\'s Triad.' : '') + '</div><div class="gib-path">ISAR Grade: ' + grade + '/3 (' + ['Non-eosinophilic','Least likely eosinophilic','Likely eosinophilic','Most likely eosinophilic'][grade] + ')</div></div>';
+
+    if (aerd) {
+      recs = rec('1','','Dupilumab (anti-IL-4Rα)','AERD phenotype — addresses T2 inflammation + CRSwNP (nasal polyps) with single biologic. FDA approval for both conditions. LIBERTY ASTHMA QUEST + SINUS-52 support this constellation.') +
+             rec('2','','Aspirin desensitization protocol','Directly modulates COX-1/leukotriene pathway. Reduces polyp recurrence after FESS. Specialist-conducted.') +
+             rec('3','','Rhinology referral','Bilateral polyps with anosmia are surgical indication. Dupilumab + FESS combination is evidence-based standard.');
+    } else if (feats.ad && eos > 200 && feno > 25) {
+      recs = rec('1','','Dupilumab (anti-IL-4Rα)','T2-high + atopic dermatitis = one biologic for two conditions. LIBERTY ASTHMA QUEST evidence. Also effective for CRSwNP.') +
+             (feats.ocs ? rec('!','amber','OCS dependence modifier: dupilumab also OCS-sparing','Anti-IL4Rα has shown 70% median OCS dose reduction in OCS-dependent patients.') : '');
+    } else if (eos > 300 && feno > 25 && feats.adultonset) {
+      recs = rec('1','','Mepolizumab or Benralizumab (anti-IL-5/5R)','Late adult-onset + eosinophil-dominant T2-high. Anti-IL-5 pathway is the primary driver. Mepolizumab: MENSA trial. Benralizumab: SIROCCO/CALIMA.') +
+             (feats.ocs ? rec('!','amber','OCS dependence: benralizumab preferred','ZONDA trial: benralizumab shows greater OCS reduction than mepolizumab in OCS-dependent patients.') : '') +
+             rec('2','','Consider tezepelumab if partial response','Broadest mechanism (anti-TSLP): effective regardless of eosinophil count. NAVIGATOR trial: consistent benefit across all T2 biomarker levels.');
+    } else if (ige > 150 && feats.atopy && eos < 300) {
+      recs = rec('1','','Omalizumab (anti-IgE)','Allergic phenotype dominant (IgE ' + ige + ', atopy confirmed). Omalizumab eligibility: IgE 30–1500 IU/mL. Weight-based dosing. INNOVATE/EXTRA trial evidence.') +
+             rec('2','','Dupilumab alternative if IgE out of range or eos >150','Broader mechanism for overlapping eosinophilic + allergic phenotype.');
+    } else {
+      recs = rec('1','','Tezepelumab (anti-TSLP)','Broadest-acting biologic — approved without phenotypic restriction (NAVIGATOR trial). Good default when biomarker profile is mixed or borderline.') +
+             rec('2','','Reassess peak BEC and FeNO before initiating','Corticosteroids suppress both markers. Measure at lowest OCS dose or during exacerbation for most accurate phenotyping.');
+    }
+  }
+
+  // Render
+  const barsEl = document.getElementById('phen-bars');
+  if (barsEl) barsEl.innerHTML = bars.map(b =>
+    '<div class="pbar-row"><div class="pbar-label">' + b.label + '</div>' +
+    '<div class="pbar-track"><div class="pbar-fill ' + (b.cls||'') + '" style="width:' + b.pct + '%"></div></div>' +
+    '<div class="pbar-pct">' + b.pct + '%</div></div>'
+  ).join('');
+
+  const recEl = document.getElementById('gena-rec');
+  if (recEl) recEl.innerHTML = alert + insight + recs;
+}
+
+function rec(rank, rankCls, name, why) {
+  return '<div class="rec-item-out">' +
+    '<div class="rec-rank ' + (rankCls ? rankCls : '') + '">' + rank + '.</div>' +
+    '<div><div class="rec-drug-name">' + name + '</div>' +
+    '<div class="rec-drug-reason">' + why + '</div></div></div>';
+}
+
+runGENA();
+</script>
+</body>
+</html>
