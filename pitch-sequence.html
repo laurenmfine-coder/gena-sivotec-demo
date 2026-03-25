@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENA — The Case for a New Standard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:   #faf8f4;
+  --cream2:  #f2ede4;
+  --cream3:  #e8e0d0;
+  --ink:     #0d1a2d;
+  --ink2:    #2a3d52;
+  --ink3:    #5a7080;
+  --teal:    #00c9a7;
+  --teal2:   rgba(0,201,167,0.1);
+  --teal3:   rgba(0,201,167,0.06);
+  --amber:   #c8882a;
+  --red:     #c0392b;
+  --border:  rgba(13,26,45,0.1);
+  --serif:   'Cormorant Garamond', Georgia, serif;
+  --mono:    'DM Mono', monospace;
+  --sans:    'DM Sans', system-ui, sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  display: flex; align-items:center; justify-content:space-between;
+  padding: 0 56px; height: 56px;
+  background: rgba(250,248,244,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: var(--mono); font-size:12px; font-weight:500;
+  color: var(--ink); letter-spacing:0.08em;
+}
+.nav-logo span { color: var(--teal); }
+.nav-links { display:flex; gap:32px; align-items:center; }
+.nav-links a {
+  font-size:11px; font-weight:500; color:var(--ink3);
+  text-decoration:none; letter-spacing:0.06em; text-transform:uppercase;
+  transition:color 0.2s;
+}
+.nav-links a:hover { color:var(--teal); }
+.nav-cta {
+  padding:7px 18px; border:1px solid var(--teal);
+  color:var(--teal); font-size:11px; font-weight:500;
+  text-decoration:none; letter-spacing:0.06em; text-transform:uppercase;
+  transition:all 0.2s; border-radius:2px;
+}
+.nav-cta:hover { background:var(--teal); color:white; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction:column; justify-content:center;
+  padding: 120px 56px 80px;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+.hero-pre {
+  font-family: var(--mono); font-size:10px; font-weight:500;
+  color: var(--teal); letter-spacing:0.3em; text-transform:uppercase;
+  margin-bottom: 28px;
+  opacity:0; animation: fadeIn 0.8s 0.3s ease forwards;
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(56px, 8vw, 120px);
+  font-weight: 300; line-height: 0.95;
+  letter-spacing: -0.03em;
+  max-width: 1000px;
+  margin-bottom: 48px;
+  opacity:0; animation: fadeIn 0.9s 0.5s ease forwards;
+}
+.hero h1 em { font-style:italic; color:var(--teal); }
+.hero h1 .sub { color:var(--ink3); }
+
+.hero-cols {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: start;
+  opacity:0; animation: fadeIn 0.8s 0.8s ease forwards;
+}
+.hero-statement {
+  font-family: var(--serif); font-size:22px; font-weight:300;
+  line-height: 1.6; color: var(--ink2);
+  border-left: 2px solid var(--teal); padding-left: 24px;
+}
+.hero-statement strong { font-weight:600; color:var(--ink); }
+
+.hero-proof { }
+.proof-item {
+  display: flex; gap:16px; align-items:flex-start;
+  padding: 16px 0; border-bottom: 1px solid var(--border);
+}
+.proof-item:last-child { border-bottom:none; }
+.proof-num {
+  font-family: var(--serif); font-size:36px; font-weight:600;
+  color: var(--ink); line-height:1; min-width:80px;
+}
+.proof-num span { font-size:20px; color:var(--teal); }
+.proof-label { font-size:13px; color:var(--ink3); line-height:1.5; padding-top:4px; }
+.proof-label strong { color:var(--ink); display:block; font-size:14px; margin-bottom:2px; }
+
+.hero-scroll {
+  position:absolute; bottom:40px; left:56px;
+  font-family:var(--mono); font-size:9px; color:var(--ink3);
+  letter-spacing:0.2em; text-transform:uppercase;
+  display:flex; align-items:center; gap:12px;
+}
+.hero-scroll::after {
+  content:''; width:40px; height:1px; background:var(--ink3);
+  animation:scrollPulse 2s infinite;
+}
+@keyframes scrollPulse { 0%,100%{opacity:0.3} 50%{opacity:0.8} }
+
+/* ── SECTION WRAPPER ── */
+.section { border-bottom: 1px solid var(--border); }
+.w { max-width:1200px; margin:0 auto; padding:96px 56px; }
+.w-mid { max-width:900px; margin:0 auto; padding:96px 56px; }
+
+.eyebrow {
+  display:flex; align-items:center; gap:16px; margin-bottom:24px;
+}
+.eyebrow-n {
+  font-family:var(--mono); font-size:11px; font-weight:500;
+  color:var(--teal); letter-spacing:0.12em;
+}
+.eyebrow-line { flex:1; height:1px; background:var(--border); }
+.eyebrow-label {
+  font-family:var(--mono); font-size:10px; color:var(--ink3);
+  letter-spacing:0.18em; text-transform:uppercase;
+}
+
+.section-h2 {
+  font-family:var(--serif); font-size:clamp(36px,5vw,64px);
+  font-weight:300; line-height:1.05; letter-spacing:-0.025em;
+  margin-bottom:24px;
+}
+.section-h2 em { font-style:italic; color:var(--teal); }
+.section-h2 .muted { color:var(--ink3); }
+
+.section-lead {
+  font-size:17px; font-weight:300; color:var(--ink2);
+  line-height:1.75; max-width:680px; margin-bottom:64px;
+}
+.section-lead strong { color:var(--ink); font-weight:500; }
+
+/* ── PATIENT STORY ── */
+#story { background:var(--cream); }
+
+.story-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:2px; margin-bottom:48px;
+}
+.story-cell {
+  padding:32px; background:var(--cream2);
+  transition:background 0.2s;
+}
+.story-cell:hover { background:var(--cream3); }
+.story-cell-year {
+  font-family:var(--serif); font-size:48px; font-weight:300;
+  color:var(--cream3); line-height:1; margin-bottom:12px;
+  transition:color 0.2s;
+}
+.story-cell:hover .story-cell-year { color:var(--teal); }
+.story-cell-label {
+  font-family:var(--mono); font-size:9px; color:var(--teal);
+  letter-spacing:0.2em; text-transform:uppercase; margin-bottom:8px;
+}
+.story-cell h4 { font-size:15px; font-weight:600; margin-bottom:8px; }
+.story-cell p { font-size:13px; color:var(--ink3); line-height:1.65; }
+
+.story-reveal {
+  background:var(--ink); color:white; padding:32px 40px;
+  display:flex; gap:32px; align-items:center;
+}
+.sr-icon { font-size:36px; flex-shrink:0; }
+.sr-label {
+  font-family:var(--mono); font-size:10px; color:var(--teal);
+  letter-spacing:0.2em; text-transform:uppercase; margin-bottom:8px;
+}
+.sr-text { font-family:var(--serif); font-size:20px; font-weight:300; line-height:1.5; }
+.sr-text strong { color:var(--teal); font-weight:600; }
+
+/* ── THE GAP ── */
+#gap { background:var(--cream2); }
+
+.gap-cols { display:grid; grid-template-columns:1fr 1fr; gap:48px; }
+
+.gap-side h3 {
+  font-family:var(--serif); font-size:28px; font-weight:300;
+  margin-bottom:20px; line-height:1.2;
+}
+.gap-side h3 em { font-style:italic; color:var(--teal); }
+
+.gap-chain { display:flex; flex-direction:column; gap:0; }
+.gc-item {
+  display:flex; gap:16px; align-items:flex-start;
+  padding:14px 0; border-bottom:1px solid var(--border);
+}
+.gc-item:last-child { border-bottom:none; }
+.gc-num {
+  font-family:var(--mono); font-size:11px; font-weight:500;
+  color:var(--teal); min-width:28px; padding-top:2px;
+}
+.gc-text { font-size:13.5px; color:var(--ink2); line-height:1.6; }
+.gc-text strong { color:var(--ink); font-weight:500; }
+
+.gap-callout {
+  padding:24px 28px; border-left:3px solid var(--teal);
+  background:var(--teal3); margin-top:24px;
+}
+.gap-callout-label {
+  font-family:var(--mono); font-size:9px; color:var(--teal);
+  letter-spacing:0.2em; text-transform:uppercase; margin-bottom:8px;
+}
+.gap-callout p { font-size:14px; color:var(--ink); line-height:1.65; }
+.gap-callout strong { color:var(--teal); }
+
+/* ── THE SEQUENCE ── */
+#sequence { background:var(--cream); }
+
+.seq-intro {
+  text-align:center; max-width:700px; margin:0 auto 64px;
+}
+
+/* Flowchart */
+.flowchart {
+  position:relative; margin-bottom:64px;
+}
+
+.flow-stages {
+  display:flex; flex-direction:column; gap:0;
+}
+
+.flow-stage {
+  display:grid; grid-template-columns:120px 1fr 280px;
+  gap:0; border:1px solid var(--border); border-bottom:none;
+  cursor:pointer; transition:background 0.2s;
+  position:relative;
+}
+.flow-stage:last-child { border-bottom:1px solid var(--border); }
+.flow-stage:hover { background:var(--teal3); }
+.flow-stage.active { background:var(--teal3); border-left:3px solid var(--teal); }
+
+.fs-num {
+  padding:24px 20px;
+  border-right:1px solid var(--border);
+  display:flex; flex-direction:column; justify-content:center;
+  align-items:center; background:var(--cream2);
+}
+.fs-num-n {
+  font-family:var(--serif); font-size:40px; font-weight:300;
+  color:var(--ink3); line-height:1;
+}
+.flow-stage.active .fs-num-n { color:var(--teal); }
+.fs-num-label {
+  font-family:var(--mono); font-size:8px; color:var(--ink3);
+  letter-spacing:0.15em; text-transform:uppercase; margin-top:4px;
+  text-align:center;
+}
+
+.fs-body {
+  padding:24px 28px;
+  display:flex; flex-direction:column; justify-content:center;
+}
+.fs-stage-label {
+  font-family:var(--mono); font-size:9px; color:var(--teal);
+  letter-spacing:0.18em; text-transform:uppercase; margin-bottom:6px;
+}
+.fs-title { font-size:16px; font-weight:600; margin-bottom:4px; }
+.fs-desc { font-size:13px; color:var(--ink3); line-height:1.55; }
+
+.fs-side {
+  padding:24px 20px;
+  border-left:1px solid var(--border);
+  display:flex; flex-direction:column; justify-content:center;
+}
+.fs-side-label {
+  font-family:var(--mono); font-size:8px; color:var(--ink3);
+  letter-spacing:0.15em; text-transform:uppercase; margin-bottom:6px;
+}
+.fs-stakeholder {
+  font-size:12px; color:var(--ink2); line-height:1.5;
+}
+.fs-stakeholder strong { color:var(--ink); display:block; font-size:13px; margin-bottom:2px; }
+
+/* Arrow connector */
+.flow-arrow {
+  display:flex; justify-content:center; align-items:center;
+  height:0; position:relative; z-index:2;
+}
+.flow-arrow::before {
+  content:'↓';
+  position:absolute;
+  font-size:18px; color:var(--teal);
+  background:var(--cream); padding:2px 8px;
+  border:1px solid var(--border); border-radius:2px;
+  top:-14px;
+}
+
+/* Expanded detail panel */
+.stage-detail {
+  display:none; padding:24px 28px 24px 148px;
+  background:var(--teal3); border-top:1px solid rgba(0,201,167,0.2);
+  font-size:13px; color:var(--ink2); line-height:1.7;
+}
+.stage-detail.open { display:block; }
+.stage-detail strong { color:var(--teal); }
+.stage-detail .detail-cols {
+  display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px; margin-top:16px;
+}
+.detail-col-label {
+  font-family:var(--mono); font-size:9px; color:var(--ink3);
+  letter-spacing:0.15em; text-transform:uppercase; margin-bottom:6px;
+}
+.detail-col-text { font-size:12.5px; color:var(--ink2); line-height:1.6; }
+
+/* Flywheel summary */
+.flywheel {
+  background:var(--ink); color:white; padding:40px 48px;
+  display:grid; grid-template-columns:1fr 2fr; gap:40px;
+  align-items:center; margin-top:48px;
+}
+.fw-left { }
+.fw-label {
+  font-family:var(--mono); font-size:10px; color:var(--teal);
+  letter-spacing:0.2em; text-transform:uppercase; margin-bottom:12px;
+}
+.fw-title {
+  font-family:var(--serif); font-size:32px; font-weight:300;
+  line-height:1.2; margin-bottom:16px;
+}
+.fw-title em { font-style:italic; color:var(--teal); }
+.fw-desc { font-size:13px; color:rgba(255,255,255,0.6); line-height:1.65; }
+.fw-chain {
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+}
+.fw-node {
+  padding:8px 14px; background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.12); border-radius:2px;
+  font-size:12px; font-weight:500; color:white;
+}
+.fw-node.teal { background:rgba(0,201,167,0.2); border-color:rgba(0,201,167,0.4); color:var(--teal); }
+.fw-arrow { color:rgba(255,255,255,0.3); font-size:16px; }
+
+/* ── STAKEHOLDERS ── */
+#stakeholders { background:var(--cream2); }
+
+.stake-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; }
+.stake-card {
+  background:var(--cream); padding:28px 24px;
+  border-top:2px solid var(--border);
+  transition:border-color 0.2s, background 0.2s;
+}
+.stake-card:hover { border-top-color:var(--teal); background:var(--teal3); }
+.stake-icon { font-size:24px; margin-bottom:14px; }
+.stake-role {
+  font-family:var(--mono); font-size:9px; color:var(--teal);
+  letter-spacing:0.15em; text-transform:uppercase; margin-bottom:8px;
+}
+.stake-title { font-size:15px; font-weight:600; margin-bottom:10px; }
+.stake-sweet {
+  font-size:12px; color:var(--ink3); line-height:1.6; margin-bottom:12px;
+  padding-left:12px; border-left:2px solid var(--cream3);
+}
+.stake-ask {
+  font-size:12px; color:var(--ink); line-height:1.6;
+  padding:10px 12px; background:var(--cream2); border-radius:2px;
+}
+.stake-ask-label {
+  font-family:var(--mono); font-size:8px; color:var(--teal);
+  letter-spacing:0.15em; text-transform:uppercase;
+  display:block; margin-bottom:4px;
+}
+
+/* ── PHARMA SPECIAL SECTION ── */
+#pharma { background:var(--cream); }
+
+.pharma-cols { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start; }
+
+.pharma-model {
+  display:flex; flex-direction:column; gap:2px;
+}
+.pm-row {
+  display:flex; gap:16px; padding:16px 20px;
+  background:var(--cream2); border-left:3px solid transparent;
+  transition:all 0.2s;
+}
+.pm-row:hover { border-left-color:var(--teal); background:var(--teal3); }
+.pm-row-who {
+  font-family:var(--mono); font-size:10px; font-weight:500;
+  color:var(--teal); min-width:80px; padding-top:2px;
+  letter-spacing:0.05em;
+}
+.pm-row-what { font-size:13px; color:var(--ink2); line-height:1.6; }
+.pm-row-what strong { color:var(--ink); font-size:13.5px; display:block; margin-bottom:2px; }
+
+.pharma-outcome {
+  padding:28px; background:var(--ink); color:white;
+  margin-top:24px;
+}
+.po-label {
+  font-family:var(--mono); font-size:9px; color:var(--teal);
+  letter-spacing:0.2em; text-transform:uppercase; margin-bottom:12px;
+}
+.po-text {
+  font-family:var(--serif); font-size:20px; font-weight:300;
+  line-height:1.55; color:rgba(255,255,255,0.9);
+}
+.po-text em { font-style:italic; color:var(--teal); }
+
+/* ── DEMO HANDOFF ── */
+#demo { background:var(--ink); color:white; }
+
+.demo-inner { max-width:1200px; margin:0 auto; padding:96px 56px; }
+
+.demo-header { text-align:center; margin-bottom:64px; }
+.demo-eyebrow {
+  font-family:var(--mono); font-size:10px; color:var(--teal);
+  letter-spacing:0.25em; text-transform:uppercase; margin-bottom:20px;
+}
+.demo-h2 {
+  font-family:var(--serif); font-size:clamp(40px,5vw,72px);
+  font-weight:300; line-height:1.05; letter-spacing:-0.025em;
+}
+.demo-h2 em { font-style:italic; color:var(--teal); }
+.demo-sub {
+  font-size:16px; color:rgba(255,255,255,0.5);
+  max-width:560px; margin:20px auto 0; line-height:1.7;
+}
+
+.demo-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; }
+.demo-card {
+  background:rgba(255,255,255,0.04); padding:32px;
+  border:1px solid rgba(255,255,255,0.08);
+  transition:all 0.2s; text-decoration:none; color:white;
+  display:flex; flex-direction:column;
+}
+.demo-card:hover {
+  background:rgba(0,201,167,0.1);
+  border-color:rgba(0,201,167,0.3);
+  transform:translateY(-2px);
+}
+.demo-card-num {
+  font-family:var(--mono); font-size:11px; color:rgba(255,255,255,0.3);
+  letter-spacing:0.12em; margin-bottom:20px;
+}
+.demo-card-icon { font-size:32px; margin-bottom:16px; }
+.demo-card-title { font-size:17px; font-weight:600; margin-bottom:8px; }
+.demo-card-desc { font-size:13px; color:rgba(255,255,255,0.5); line-height:1.6; flex:1; }
+.demo-card-cta {
+  margin-top:20px; font-family:var(--mono); font-size:11px;
+  color:var(--teal); letter-spacing:0.08em; display:flex;
+  align-items:center; gap:8px;
+}
+.demo-card-cta::after {
+  content:'→'; transition:transform 0.2s;
+}
+.demo-card:hover .demo-card-cta::after { transform:translateX(4px); }
+
+.demo-ask {
+  text-align:center; padding:64px 32px 0;
+  border-top:1px solid rgba(255,255,255,0.08); margin-top:2px;
+}
+.demo-ask-label {
+  font-family:var(--mono); font-size:10px; color:var(--teal);
+  letter-spacing:0.25em; text-transform:uppercase; margin-bottom:20px;
+}
+.demo-ask h3 {
+  font-family:var(--serif); font-size:clamp(28px,4vw,48px);
+  font-weight:300; line-height:1.2; margin-bottom:20px;
+}
+.demo-ask h3 em { font-style:italic; color:var(--teal); }
+.demo-ask p {
+  font-size:15px; color:rgba(255,255,255,0.5);
+  max-width:540px; margin:0 auto 32px; line-height:1.7;
+}
+.ask-items {
+  display:flex; justify-content:center; gap:32px; flex-wrap:wrap;
+}
+.ask-item {
+  padding:12px 24px; border:1px solid rgba(255,255,255,0.15);
+  border-radius:2px; font-size:13px; color:rgba(255,255,255,0.7);
+}
+.ask-item strong { color:var(--teal); display:block; font-size:11px;
+  font-family:var(--mono); letter-spacing:0.1em; margin-bottom:4px; }
+
+/* ── FOOTER ── */
+footer {
+  background:var(--cream2); padding:24px 56px;
+  display:flex; align-items:center; justify-content:space-between;
+  border-top:1px solid var(--border);
+}
+.foot-brand { font-family:var(--mono); font-size:11px; color:var(--ink3); }
+.foot-brand strong { color:var(--teal); }
+.foot-note { font-size:11px; color:var(--ink3); max-width:400px; text-align:right; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(12px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.reveal {
+  opacity:0; transform:translateY(16px);
+  transition:opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.in { opacity:1; transform:translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px) {
+  nav { padding:0 24px; }
+  .nav-links { display:none; }
+  .hero { padding:100px 24px 60px; }
+  .hero-cols { grid-template-columns:1fr; gap:40px; }
+  .w, .w-mid, .demo-inner { padding:64px 24px; }
+  .story-grid { grid-template-columns:1fr; }
+  .gap-cols { grid-template-columns:1fr; }
+  .flow-stage { grid-template-columns:80px 1fr; }
+  .fs-side { display:none; }
+  .stage-detail .detail-cols { grid-template-columns:1fr; }
+  .flywheel { grid-template-columns:1fr; }
+  .stake-grid { grid-template-columns:1fr; }
+  .pharma-cols { grid-template-columns:1fr; }
+  .demo-cards { grid-template-columns:1fr; }
+  footer { flex-direction:column; gap:12px; }
+  .foot-note { text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo"><span>GENA</span> × SIVOTEC</div>
+  <div class="nav-links">
+    <a href="#story">The Problem</a>
+    <a href="#gap">The Gap</a>
+    <a href="#sequence">The Sequence</a>
+    <a href="#stakeholders">Stakeholders</a>
+    <a href="#pharma">Partnership Model</a>
+    <a href="#demo">Live Demo</a>
+  </div>
+  <a href="#demo" class="nav-cta">See the Demo</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-pre">GENA × SIVOTEC &nbsp;·&nbsp; Strategic Pitch &nbsp;·&nbsp; 2026</div>
+  <h1>
+    The wrong diagnosis<br>
+    is the most <em>expensive</em><br>
+    <span class="sub">thing in medicine.</span>
+  </h1>
+  <div class="hero-cols">
+    <div class="hero-statement">
+      GENA doesn't replace clinical judgment.
+      It gives physicians <strong>the constellation logic</strong>
+      they were never taught — and makes the rare diagnosis
+      hiding inside a common complaint <strong>impossible to miss.</strong>
+    </div>
+    <div class="hero-proof">
+      <div class="proof-item">
+        <div class="proof-num">7–14<span>yr</span></div>
+        <div class="proof-label"><strong>Average diagnostic delay</strong> for rare genetic diseases. Most are seen by 3–7 physicians before diagnosis.</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num">$20<span>K+</span></div>
+        <div class="proof-label"><strong>Annual cost of a mismatched biologic</strong> in asthma — prescribed for a phenotype where it has no evidence of benefit.</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num">0</div>
+        <div class="proof-label"><strong>Validated point-of-care tools</strong> that integrate constellation recognition, phenotype identification, and genetic cascade testing across disease spaces.</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">The case for GENA</div>
+</section>
+
+<!-- ACT 1: THE PATIENT -->
+<section id="story" class="section">
+<div class="w">
+  <div class="eyebrow reveal">
+    <span class="eyebrow-n">Act I</span>
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-label">The Patient</span>
+  </div>
+  <h2 class="section-h2 reveal">Marcus T., 41 years old.<br><em>Six years. Three physicians.<br>Zero diagnosis.</em></h2>
+  <p class="section-lead reveal">
+    Marcus is a finance professional who presented with fatigue, hypertension, and what three successive
+    physicians called treatment-resistant depression. He was on sertraline for six months with zero improvement.
+    <strong>Not one physician asked about the burning pain in his hands.</strong>
+  </p>
+
+  <div class="story-grid reveal">
+    <div class="story-cell">
+      <div class="story-cell-year">Yr 1</div>
+      <div class="story-cell-label">First Presentation</div>
+      <h4>Treatment-resistant depression</h4>
+      <p>Fatigue. Hypertension. Mood changes. Sertraline prescribed. The acroparesthesias Marcus has had since adolescence — burning pain in his hands — were never asked about.</p>
+    </div>
+    <div class="story-cell">
+      <div class="story-cell-year">Yr 2–3</div>
+      <div class="story-cell-label">Escalation</div>
+      <h4>Second and third physician</h4>
+      <p>Two more physicians. More antidepressants. An ECG showing subtle LVH attributed to hypertension. A creatinine of 1.4 attributed to aging. No one connected the findings.</p>
+    </div>
+    <div class="story-cell">
+      <div class="story-cell-year">Yr 4–5</div>
+      <div class="story-cell-label">The Missing Question</div>
+      <h4>Family history never taken</h4>
+      <p>Marcus's maternal uncle died at 46 of "kidney problems and burning hands." His mother has Stage 2 CKD attributed to "unknown cause." This information existed. No physician asked for it.</p>
+    </div>
+    <div class="story-cell">
+      <div class="story-cell-year">Yr 6</div>
+      <div class="story-cell-label">Diagnosis</div>
+      <h4>Fabry disease — finally</h4>
+      <p>Alpha-galactosidase A critically low. GLA pathogenic variant confirmed. Fabry disease. Enzyme replacement therapy initiated. His brother Raul — with unexplained CKD at 38 — tested next. Also Fabry. The diagnosis that should have taken one visit took six years.</p>
+    </div>
+  </div>
+
+  <div class="story-reveal reveal">
+    <div class="sr-icon">💡</div>
+    <div>
+      <div class="sr-label">The GENA Insight</div>
+      <div class="sr-text">
+        The constellation was complete at Visit 1.
+        Fatigue + acroparesthesias + hypertension + family history of kidney disease and early death in a maternal male relative
+        = <strong>Fabry disease until proven otherwise.</strong>
+        GENA would have surfaced this before a single antidepressant was prescribed.
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ACT 2: THE GAP -->
+<section id="gap" class="section">
+<div class="w">
+  <div class="eyebrow reveal">
+    <span class="eyebrow-n">Act II</span>
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-label">The Recognition Gap</span>
+  </div>
+  <h2 class="section-h2 reveal">This isn't a physician failure.<br><em>It's a system failure.</em></h2>
+  <p class="section-lead reveal">
+    Marcus's physicians weren't negligent. They were <strong>undertrained in pattern recognition for rare disease</strong>
+    — which is exactly what medical education produces. Two chapters of genetics in four years of medical school.
+    No curriculum for constellation-based reasoning. No tool at the point of care.
+  </p>
+
+  <div class="gap-cols reveal">
+    <div class="gap-side">
+      <h3>Why physicians <em>miss</em> the diagnosis</h3>
+      <div class="gap-chain">
+        <div class="gc-item">
+          <div class="gc-num">01</div>
+          <div class="gc-text"><strong>Education gap:</strong> Medical schools train for common diagnoses. Rare disease pattern recognition is not systematically taught. There is no curriculum for "what does Fabry disease look like when it presents as fatigue?"</div>
+        </div>
+        <div class="gc-item">
+          <div class="gc-num">02</div>
+          <div class="gc-text"><strong>Constellation blindness:</strong> Physicians are trained to think in differential diagnoses, not in constellations. They see each finding individually. No tool connects them across time and family history.</div>
+        </div>
+        <div class="gc-item">
+          <div class="gc-num">03</div>
+          <div class="gc-text"><strong>No trigger for suspicion:</strong> You cannot refer for what you don't suspect. If the physician doesn't recognize the constellation, they never open a genetic tool, never order the right test, never make the diagnosis.</div>
+        </div>
+        <div class="gc-item">
+          <div class="gc-num">04</div>
+          <div class="gc-text"><strong>Tool gap:</strong> PharmCAT and GeneSight tell you how to dose a drug after you've made the diagnosis. No tool helps you make the diagnosis in the first place.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gap-side">
+      <h3>The same problem in <em>common disease</em></h3>
+      <div class="gap-chain">
+        <div class="gc-item">
+          <div class="gc-num">01</div>
+          <div class="gc-text"><strong>Asthma is not one disease:</strong> Six distinct endotypes. Same chief complaint, different biology, different optimal treatments. 26 million patients receiving the same stepwise protocol regardless of inflammatory phenotype.</div>
+        </div>
+        <div class="gc-item">
+          <div class="gc-num">02</div>
+          <div class="gc-text"><strong>Wrong biologic, wrong patient:</strong> Six FDA-approved biologics, no head-to-head trials, no validated point-of-care selection tool. Biologic choice is often empiric, formulary-driven, or pharma-representative-driven.</div>
+        </div>
+        <div class="gc-item">
+          <div class="gc-num">03</div>
+          <div class="gc-text"><strong>Rare disease hiding in common presentation:</strong> EGPA presents as severe asthma. A1AT deficiency presents as childhood asthma. VCD is treated as refractory asthma for years. The same constellation logic that catches Fabry catches these.</div>
+        </div>
+        <div class="gc-item">
+          <div class="gc-num">04</div>
+          <div class="gc-text"><strong>Overtreatment is as costly as undertreatment:</strong> T2-low asthma patients receiving biologics that have no evidence of benefit in their phenotype. $20,000/year. Zero response. GENA prevents this as reliably as it prevents missed diagnoses.</div>
+        </div>
+      </div>
+
+      <div class="gap-callout">
+        <div class="gap-callout-label">The unifying insight</div>
+        <p>The recognition problem is the same problem stated twice — once in rare disease, once in common disease. <strong>GENA's constellation engine solves both</strong> with the same underlying logic.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ACT 3: THE SEQUENCE -->
+<section id="sequence" class="section">
+<div class="w">
+  <div class="eyebrow reveal">
+    <span class="eyebrow-n">Act III</span>
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-label">The Solution</span>
+  </div>
+  <h2 class="section-h2 reveal">Not one tool.<br><em>A connected system.</em></h2>
+  <p class="section-lead reveal">
+    GENA cannot solve the recognition problem alone — because you cannot use a tool for a diagnosis you
+    don't suspect. The solution is a <strong>connected sequence</strong> where each stage feeds the next,
+    and each stage has a different entry point for a different stakeholder.
+    Click any stage to expand.
+  </p>
+
+  <div class="flow-stages reveal" id="flowStages">
+
+    <div class="flow-stage" onclick="toggleStage(0)">
+      <div class="fs-num"><div class="fs-num-n">01</div><div class="fs-num-label">Foundation</div></div>
+      <div class="fs-body">
+        <div class="fs-stage-label">Education</div>
+        <div class="fs-title">Clinical reasoning education builds pattern recognition</div>
+        <div class="fs-desc">Medical students and residents learn constellation-based reasoning through case simulation. The pattern is stored. The next real patient activates it.</div>
+      </div>
+      <div class="fs-side">
+        <div class="fs-side-label">Primary stakeholder</div>
+        <div class="fs-stakeholder"><strong>Medical educators</strong> Harvard Macy Institute, AAMC consortium, CME providers. Independent from commercial product.</div>
+      </div>
+    </div>
+    <div class="stage-detail" id="detail-0">
+      <p>The GENA case suite — 20 cases, 4 complaint families, pedigree engine, reasoning maps — is the educational layer. A physician who has walked through Marcus's case in simulation <strong>will notice acroparesthesias differently</strong> in a real patient. The schema exists now. Pre/post studies using validated clinical reasoning instruments (Script Concordance Test) demonstrate the effect. Multi-site study through Harvard Macy Institute. SIVOTEC provides platform as in-kind contribution; investigators control study design and publication.</p>
+      <div class="detail-cols">
+        <div><div class="detail-col-label">Evidence basis</div><div class="detail-col-text">Schema theory, cognitive load theory. Established in simulation medicine literature. CME-accredited delivery to practicing physicians.</div></div>
+        <div><div class="detail-col-label">Commercial separation</div><div class="detail-col-text">Research conducted by independent academic consortium. SIVOTEC disclosed as platform contributor. No editorial control over outcomes.</div></div>
+        <div><div class="detail-col-label">Output</div><div class="detail-col-text">Published educational evidence. CME-trained physician network. Population of physicians who recognize the constellations GENA is built to catch.</div></div>
+      </div>
+    </div>
+
+    <div class="flow-stage" onclick="toggleStage(1)">
+      <div class="fs-num"><div class="fs-num-n">02</div><div class="fs-num-label">Trigger</div></div>
+      <div class="fs-body">
+        <div class="fs-stage-label">Recognition</div>
+        <div class="fs-title">Education creates recognition — or GENA surfaces the patient passively</div>
+        <div class="fs-desc">Educated physicians notice the constellation and open GENA. Or: GENA runs passively on EHR data and surfaces patients who already match a constellation — without requiring physician suspicion first.</div>
+      </div>
+      <div class="fs-side">
+        <div class="fs-side-label">Primary stakeholder</div>
+        <div class="fs-stakeholder"><strong>Clinicians + EMR developers</strong> SMART on FHIR passive screening. No new workflow. Soft alert: "This patient's profile warrants review."</div>
+      </div>
+    </div>
+    <div class="stage-detail" id="detail-1">
+      <p>The passive screening layer is GENA's most powerful adoption mechanism. Instead of waiting for physician suspicion, <strong>GENA scans existing EHR data</strong> — lab values, visit notes, family history fields, medication lists — and identifies patients who already meet partial constellation criteria. A soft, non-interruptive alert surfaces them: not an alarm, not a compliance check, but a consultation. "This patient's profile is consistent with a condition that is frequently missed. Would you like to review?" No diagnosis. No liability. Just a question.</p>
+      <div class="detail-cols">
+        <div><div class="detail-col-label">Technical approach</div><div class="detail-col-text">SMART on FHIR. EHR-agnostic. Works with Epic, Cerner, athenahealth without rebuilding. NHLBI CDS Connect infrastructure already deployed for Steps 2-5.</div></div>
+        <div><div class="detail-col-label">Alert design</div><div class="detail-col-text">Non-interruptive. Avoids alert fatigue. Soft nudge, not hard stop. Physician retains full autonomy. Literature shows non-interruptive alerts have significantly lower override rates.</div></div>
+        <div><div class="detail-col-label">Output</div><div class="detail-col-text">Patients who meet constellation criteria are surfaced before they accumulate further diagnostic delay. Physician opens GENA. Sequence advances to Stage 3.</div></div>
+      </div>
+    </div>
+
+    <div class="flow-stage" onclick="toggleStage(2)">
+      <div class="fs-num"><div class="fs-num-n">03</div><div class="fs-num-label">Engine</div></div>
+      <div class="fs-body">
+        <div class="fs-stage-label">GENA</div>
+        <div class="fs-title">Constellation analysis → phenotype identification → treatment recommendation</div>
+        <div class="fs-desc">The physician enters the clinical constellation. GENA returns rare disease exclusion, endotype probabilities, ranked treatment recommendation, genetic testing indication, and cascade testing plan.</div>
+      </div>
+      <div class="fs-side">
+        <div class="fs-side-label">Primary stakeholder</div>
+        <div class="fs-stakeholder"><strong>SIVOTEC</strong> The core product. Constellation engine running across rare disease, asthma, rheumatology, dermatology, GI. One platform, multiple disease spaces.</div>
+      </div>
+    </div>
+    <div class="stage-detail" id="detail-2">
+      <p>GENA's engine runs four simultaneous layers: <strong>(1) Rare disease exclusion</strong> — before any treatment is selected. <strong>(2) Phenotype identification</strong> — which endotype of this disease is this patient? <strong>(3) Treatment recommendation</strong> — what follows from that phenotype, ranked by evidence grade. <strong>(4) Genetics assessment</strong> — is diagnostic or pharmacogenomic testing indicated? Does the family need cascade testing? This runs across rare disease identification (Fabry, XLA, A1AT, Angelman) and common disease phenotyping (asthma endotypes, RA biologic selection, IBD endotyping) with the same underlying logic.</p>
+      <div class="detail-cols">
+        <div><div class="detail-col-label">Rare disease engine</div><div class="detail-col-text">20 cases across 4 chief complaint families. Pedigree engine with GENA cascade testing recommendations. Visual reasoning maps. Evidence-graded teaching modules.</div></div>
+        <div><div class="detail-col-label">Asthma phenotyping</div><div class="detail-col-text">ISAR eosinophil gradient algorithm (35,000 patients). AHRQ FeNO algorithms (14 RCTs, High SOE). EGPA/A1AT/VCD exclusion layer. Ranked biologic recommendation.</div></div>
+        <div><div class="detail-col-label">Expansion roadmap</div><div class="detail-col-text">Rheumatology (HLA-B27, RF, anti-CCP), dermatology (atopic endotypes, FLG pharmacogenomics), GI (IBD endotyping, TPMT prior to azathioprine).</div></div>
+      </div>
+    </div>
+
+    <div class="flow-stage" onclick="toggleStage(3)">
+      <div class="fs-num"><div class="fs-num-n">04</div><div class="fs-num-label">Record</div></div>
+      <div class="fs-body">
+        <div class="fs-stage-label">Documentation</div>
+        <div class="fs-title">GENA generates the phenotype record required for prior authorization</div>
+        <div class="fs-desc">The phenotype assessment becomes a structured clinical document. Payers require it before approving biologics. Physicians use GENA not only because they believe in it — but because the prior auth won't go through without it.</div>
+      </div>
+      <div class="fs-side">
+        <div class="fs-side-label">Primary stakeholder</div>
+        <div class="fs-stakeholder"><strong>Payers</strong> Prior auth requirement creates pull. One prevented non-responding biologic year pays for the tool many times over.</div>
+      </div>
+    </div>
+    <div class="stage-detail" id="detail-3">
+      <p>This is the adoption lever that removes the "physicians won't use what they don't suspect" barrier. If <strong>prior authorization requires phenotype documentation</strong>, every prescribing physician must phenotype before prescribing. GENA is the validated tool that generates that documentation. The precedent exists: several payers already require blood eosinophil counts before approving anti-IL-5 biologics. Expanding that to a full GENA constellation assessment is a policy change, not a scientific one — and the science already supports it. GENA's real-world evidence from the pilot study is the data that makes it happen.</p>
+      <div class="detail-cols">
+        <div><div class="detail-col-label">Current precedent</div><div class="detail-col-text">Multiple payers require eos count before anti-IL-5 approval. FDA dupilumab labeling references FeNO and eos as response predictors. Companion diagnostics in oncology (PD-L1, HER2) as the policy template.</div></div>
+        <div><div class="detail-col-label">GENA's role</div><div class="detail-col-text">Structured phenotype documentation generated at point of care. FHIR-compatible output integrates with prior auth workflows. Payer pilot: one insurer, one disease space, 12 months.</div></div>
+        <div><div class="detail-col-label">Financial case</div><div class="detail-col-text">Rachel case: mepolizumab avoided in T2-low patient = $20,000+ saved year one. Diane case: EGPA caught before permanent neuropathy = years of disability costs avoided. Marcus case: correct $50 test vs. years of wrong treatment.</div></div>
+      </div>
+    </div>
+
+    <div class="flow-stage" onclick="toggleStage(4)">
+      <div class="fs-num"><div class="fs-num-n">05</div><div class="fs-num-label">Evidence</div></div>
+      <div class="fs-body">
+        <div class="fs-stage-label">Outcomes Data</div>
+        <div class="fs-title">Real-world evidence from GENA-guided care changes policy</div>
+        <div class="fs-desc">The pilot generates the first real-world dataset linking constellation-based phenotyping to treatment outcomes across severity. This is the evidence base for regulatory and formulary decisions.</div>
+      </div>
+      <div class="fs-side">
+        <div class="fs-side-label">Primary stakeholder</div>
+        <div class="fs-stakeholder"><strong>All stakeholders</strong> Published outcomes shift clinician behavior, payer policy, regulatory guidance, and pharma investment simultaneously.</div>
+      </div>
+    </div>
+    <div class="stage-detail" id="detail-4">
+      <p>The pilot study generates something that does not currently exist: <strong>a real-world evidence dataset linking phenotype identification to biologic outcomes</strong>. Primary endpoints: rate of complete biomarker phenotyping before biologic initiation, time to correct diagnosis in referred patients, concordance between GENA recommendation and specialist decision. Secondary: direct cost comparison, rare disease identification rate vs. usual care, family cascade testing yield. This is publishable in JACI, CHEST, or NEJM Evidence. It is the dataset that payers need to require phenotype documentation. It is the dataset that FDA needs to move toward required companion phenotyping before biologic approval.</p>
+      <div class="detail-cols">
+        <div><div class="detail-col-label">Study design</div><div class="detail-col-text">Severe asthma clinic pilot. 50 patients. 12 months. Pre-defined endpoints. Independent investigators. Results published regardless of outcome.</div></div>
+        <div><div class="detail-col-label">Publication target</div><div class="detail-col-text">JACI In Practice, CHEST, or npj Primary Care Respiratory Medicine. Evidence grade changes from expert consensus to real-world prospective data.</div></div>
+        <div><div class="detail-col-label">Long-term horizon</div><div class="detail-col-text">FDA moves toward required phenotyping before biologic approval — the asthma equivalent of PD-L1 testing before pembrolizumab. GENA is the validated tool at that policy inflection point.</div></div>
+      </div>
+    </div>
+
+    <div class="flow-stage" onclick="toggleStage(5)" style="border-left:3px solid var(--teal)">
+      <div class="fs-num" style="background:var(--teal3)"><div class="fs-num-n" style="color:var(--teal)">06</div><div class="fs-num-label">Leverage</div></div>
+      <div class="fs-body">
+        <div class="fs-stage-label">Policy + Market</div>
+        <div class="fs-title">Formulary leverage: phenotyping becomes the condition for biologic coverage</div>
+        <div class="fs-desc">Real-world evidence drives payer policy. GENA documentation becomes required for prior authorization. Correct phenotyping is the condition for formulary placement. The flywheel closes.</div>
+      </div>
+      <div class="fs-side">
+        <div class="fs-side-label">Primary stakeholder</div>
+        <div class="fs-stakeholder"><strong>Payers + Pharma</strong> Pharma gets responders, not failures. Payers stop paying for non-responders. GENA becomes the required infrastructure for biologic prescribing.</div>
+      </div>
+    </div>
+    <div class="stage-detail" id="detail-5">
+      <p>This is the end state: <strong>phenotyping before biologic prescribing is required, not optional</strong>. The same policy evolution that mandated HER2 testing before trastuzumab in oncology applies to eos + FeNO + constellation assessment before anti-IL-5 in asthma. GENA is the tool that generates that assessment. Every biologic prescription for severe asthma — approximately 500,000 per year in the US — requires GENA documentation before prior auth is approved. That is GENA's scale endpoint. Everything in the sequence is working toward this moment.</p>
+      <div class="detail-cols">
+        <div><div class="detail-col-label">Policy precedent</div><div class="detail-col-text">HER2 + trastuzumab. PD-L1 + pembrolizumab. EGFR + erlotinib. All started as "referenced in labeling." All became required companion diagnostics within 5-10 years of approval.</div></div>
+        <div><div class="detail-col-label">GENA's position</div><div class="detail-col-text">ISAR algorithm already referenced in asthma guidelines. FeNO already in dupilumab labeling. GENA operationalizes both. The regulatory trajectory is visible. The timeline is 5-7 years.</div></div>
+        <div><div class="detail-col-label">Market size</div><div class="detail-col-text">~500,000 biologic prescriptions/year for severe asthma in US. $4B+ market. If GENA documentation is required for each: the platform is not optional infrastructure. It is the standard of care.</div></div>
+      </div>
+    </div>
+
+  </div><!-- end flow-stages -->
+
+  <!-- Flywheel summary -->
+  <div class="flywheel reveal">
+    <div class="fw-left">
+      <div class="fw-label">The flywheel</div>
+      <div class="fw-title">Each stage <em>feeds</em> the next.</div>
+      <div class="fw-desc">This is not a linear product roadmap. It is a self-reinforcing system. Educational outcomes drive clinical adoption. Clinical adoption drives outcome data. Outcome data drives policy. Policy drives formulary leverage. Formulary leverage funds the next disease space expansion.</div>
+    </div>
+    <div class="fw-chain">
+      <div class="fw-node teal">Education</div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-node">Recognition</div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-node teal">GENA Engine</div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-node">Documentation</div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-node">Outcomes Data</div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-node teal">Policy Change</div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-node">Formulary Leverage</div>
+      <div class="fw-arrow">→</div>
+      <div class="fw-node teal">Scale</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ACT 4: STAKEHOLDERS -->
+<section id="stakeholders" class="section">
+<div class="w">
+  <div class="eyebrow reveal">
+    <span class="eyebrow-n">Act IV</span>
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-label">Buy-In by Stakeholder</span>
+  </div>
+  <h2 class="section-h2 reveal">Different audiences.<br><em>Same flywheel.</em></h2>
+  <p class="section-lead reveal">
+    Every stakeholder group has a different definition of value and a different reason to hesitate.
+    GENA's pitch to each group is different. The platform is the same.
+  </p>
+
+  <div class="stake-grid reveal">
+    <div class="stake-card">
+      <div class="stake-icon">🩺</div>
+      <div class="stake-role">Clinicians</div>
+      <div class="stake-title">Not an alert. A consultation.</div>
+      <div class="stake-sweet">They want better decisions, faster. They don't want to be second-guessed. Alert fatigue is real — override rates exceed 90% for generic drug interaction alerts.</div>
+      <div class="stake-ask">
+        <span class="stake-ask-label">The pitch</span>
+        "GENA doesn't tell you what to do. It tells you what to ask. And it tells you when the constellation you're looking at has a rare diagnosis hiding in it — before you spend two years treating the wrong thing."
+      </div>
+    </div>
+    <div class="stake-card">
+      <div class="stake-icon">🏥</div>
+      <div class="stake-role">Health Systems</div>
+      <div class="stake-title">Cost avoidance + value-based metrics.</div>
+      <div class="stake-sweet">Under CMS alternative payment models, they are financially accountable for outcomes. A patient accumulating complications from a missed diagnosis for six years is expensive. Cascade testing that identifies five family members before symptoms develop is a system win.</div>
+      <div class="stake-ask">
+        <span class="stake-ask-label">The ask</span>
+        12-month pilot at a severe asthma clinic. Three defined endpoints. Publishable results. One prevented non-responding biologic pays for the pilot.
+      </div>
+    </div>
+    <div class="stake-card">
+      <div class="stake-icon">💻</div>
+      <div class="stake-role">EMR Developers</div>
+      <div class="stake-title">Ecosystem expansion, not replacement.</div>
+      <div class="stake-sweet">Epic, Cerner, and athenahealth want third-party tools that increase platform stickiness. They won't build GENA — they want GENA built on their platform using their APIs.</div>
+      <div class="stake-ask">
+        <span class="stake-ask-label">The approach</span>
+        SMART on FHIR from day one. EHR-agnostic. Plugs into NHLBI CDS Connect infrastructure as the Step 5+ extension they explicitly left out of scope. "We extend your investment. We don't replace it."
+      </div>
+    </div>
+    <div class="stake-card">
+      <div class="stake-icon">🎓</div>
+      <div class="stake-role">Medical Educators</div>
+      <div class="stake-title">Independent research, not commercial adoption.</div>
+      <div class="stake-sweet">Medical schools don't accept commercial tools pushing for curricular adoption. They accept peer-reviewed educational evidence from independent investigators.</div>
+      <div class="stake-ask">
+        <span class="stake-ask-label">The structure</span>
+        Harvard Macy Institute-anchored multi-site study. Investigator-initiated. SIVOTEC provides platform as in-kind contribution, no editorial control. Results published regardless of outcome. AAMC consortium for distribution.
+      </div>
+    </div>
+    <div class="stake-card">
+      <div class="stake-icon">📋</div>
+      <div class="stake-role">Payers</div>
+      <div class="stake-title">Prior auth as the adoption lever.</div>
+      <div class="stake-sweet">They've been burned by precision medicine tools that promised savings and delivered none. They respond to data, not demos. And they respond to cost avoidance arguments more than outcome arguments.</div>
+      <div class="stake-ask">
+        <span class="stake-ask-label">The pitch</span>
+        Require phenotype documentation before biologic approval. GENA generates it. One prevented non-responding biologic year pays for the tool. Real-world evidence study: one insurer, one disease space, 12 months.
+      </div>
+    </div>
+    <div class="stake-card">
+      <div class="stake-icon">💊</div>
+      <div class="stake-role">Pharma</div>
+      <div class="stake-title">Responders, not failures. Aligned incentives.</div>
+      <div class="stake-sweet">Pharma wants their biologics prescribed to patients most likely to respond. A patient who doesn't respond stops the drug, generates negative word-of-mouth, and triggers coverage denials. Correct phenotyping is in their commercial interest.</div>
+      <div class="stake-ask">
+        <span class="stake-ask-label">The structure</span>
+        Unrestricted educational grant. Disease state education, not branded promotion. GENA algorithm independent. Pharma funds the study; investigators control design and publication. Disclosed relationship. Everyone wins.
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ACT 5: PHARMA PARTNERSHIP MODEL -->
+<section id="pharma" class="section">
+<div class="w">
+  <div class="eyebrow reveal">
+    <span class="eyebrow-n">Act V</span>
+    <div class="eyebrow-line"></div>
+    <span class="eyebrow-label">The Partnership Model</span>
+  </div>
+  <h2 class="section-h2 reveal">What if better phenotyping<br><em>changed formulary access?</em></h2>
+  <p class="section-lead reveal">
+    The most powerful version of GENA's commercial model is a three-way alignment between
+    pharma, payers, and GENA — where correct phenotyping is the condition for formulary placement,
+    and <strong>everyone's incentives point in the same direction.</strong>
+  </p>
+
+  <div class="pharma-cols reveal">
+    <div>
+      <div class="pharma-model">
+        <div class="pm-row">
+          <div class="pm-row-who">PHARMA</div>
+          <div class="pm-row-what">
+            <strong>Funds disease state education (unrestricted)</strong>
+            CME programs teaching phenotype recognition. Not branded to a specific drug. Focused on the biology — T2-high vs. T2-low, AERD constellation, EGPA thresholds. Physicians who complete the education prescribe more appropriately, not more volume.
+          </div>
+        </div>
+        <div class="pm-row">
+          <div class="pm-row-who">GENA</div>
+          <div class="pm-row-what">
+            <strong>Provides the validated phenotyping tool</strong>
+            Algorithm is independent of pharma influence. Evidence-based. Discloses all funding relationships. Generates phenotype documentation that is product-agnostic — it recommends based on the constellation, not the formulary.
+          </div>
+        </div>
+        <div class="pm-row">
+          <div class="pm-row-who">PAYERS</div>
+          <div class="pm-row-what">
+            <strong>Require phenotype documentation for prior auth</strong>
+            GENA documentation is accepted as the standard. Biologics approved only for documented phenotype-matched patients. Non-responders are identified before prescription, not after six months of failed therapy.
+          </div>
+        </div>
+        <div class="pm-row">
+          <div class="pm-row-who">PHYSICIANS</div>
+          <div class="pm-row-what">
+            <strong>Educated to recognize, trained to document</strong>
+            CME creates recognition. GENA provides the tool. Prior auth creates the workflow incentive. The physician uses GENA because the science supports it and because the system requires it.
+          </div>
+        </div>
+        <div class="pm-row">
+          <div class="pm-row-who">PATIENTS</div>
+          <div class="pm-row-what">
+            <strong>Get the right treatment the first time</strong>
+            Priya gets dupilumab + aspirin desensitization, not omalizumab. Marcus gets augmentation therapy, not a biologic that achieves nothing. Diane's EGPA is caught before permanent neuropathy. Rachel is stepped down, not escalated.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="pharma-outcome">
+        <div class="po-label">The outcome for pharma</div>
+        <div class="po-text">
+          Better phenotype matching means <em>more responders per prescription</em>.
+          Real-world response rates improve. Payer coverage expands.
+          The drug's reputation strengthens. The biologic that was being used
+          for the wrong patients — and failing — is now being used for the right patients.
+          <em>GENA doesn't threaten pharma's market. It makes their market better.</em>
+        </div>
+      </div>
+
+      <div style="margin-top:24px;padding:24px;background:var(--cream2);border:1px solid var(--border)">
+        <div class="detail-col-label">The conflict of interest guardrail</div>
+        <div class="detail-col-text" style="margin-top:8px">
+          Pharma funds the education. Pharma does not control the algorithm. The GENA phenotyping engine recommends based on the clinical constellation — not based on which company funded the surrounding education. That independence is disclosed, auditable, and non-negotiable. It is also what makes GENA credible to clinicians, payers, and regulators. The moment GENA is seen as a pharma tool, clinician trust collapses. Independence is not just ethical — it is commercially essential.
+        </div>
+      </div>
+
+      <div style="margin-top:16px;padding:24px;background:var(--ink);color:white">
+        <div class="po-label">The question to answer at this meeting</div>
+        <div style="font-family:var(--serif);font-size:18px;font-weight:300;line-height:1.5;color:rgba(255,255,255,0.9)">
+          Which pharma partner is most aligned with GENA's beachhead disease space — and would fund an unrestricted educational grant structured to preserve GENA's clinical independence?
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- DEMO HANDOFF -->
+<section id="demo">
+<div class="demo-inner">
+  <div class="demo-header reveal">
+    <div class="demo-eyebrow">Live Platform</div>
+    <h2 class="demo-h2">The sequence<br><em>in action.</em></h2>
+    <p class="demo-sub">Each tool below demonstrates one stage of the sequence. Open them in order, or jump to the one most relevant to your question.</p>
+  </div>
+
+  <div class="demo-cards reveal">
+    <a href="cases.html" class="demo-card">
+      <div class="demo-card-num">Stage 01 &nbsp;·&nbsp; Education</div>
+      <div class="demo-card-icon">🧠</div>
+      <div class="demo-card-title">Clinical Reasoning Case Suite</div>
+      <div class="demo-card-desc">20 cases. 4 complaint families. Pedigree engine with GENA cascade testing. Visual reasoning maps. The educational layer that builds constellation recognition — the foundation of the entire sequence.</div>
+      <div class="demo-card-cta">Open Case Suite</div>
+    </a>
+    <a href="asthma-gena-v2.html" class="demo-card">
+      <div class="demo-card-num">Stage 03 &nbsp;·&nbsp; GENA Engine</div>
+      <div class="demo-card-icon">🫁</div>
+      <div class="demo-card-title">GENA Asthma Phenotyping</div>
+      <div class="demo-card-desc">The live phenotyping engine. Biomarker sliders, real-time endotype probabilities, ranked biologic recommendations, EGPA/A1AT/VCD exclusion alerts. The ISAR algorithm deployed clinically for the first time.</div>
+      <div class="demo-card-cta">Open Asthma Site</div>
+    </a>
+    <a href="emr-simulator.html" class="demo-card">
+      <div class="demo-card-num">Stage 02 &nbsp;·&nbsp; Recognition</div>
+      <div class="demo-card-icon">💻</div>
+      <div class="demo-card-title">Clinical EMR Simulator</div>
+      <div class="demo-card-desc">A blank chart. Marcus in the exam room. No guided questions. The learner drives the entire encounter — demonstrating what recognition looks like when the physician has the right schema and what it costs when they don't.</div>
+      <div class="demo-card-cta">Open EMR Simulator</div>
+    </a>
+  </div>
+
+  <div class="demo-ask reveal">
+    <div class="demo-ask-label">The Ask</div>
+    <h3>One pilot. One disease space.<br><em>Twelve months. Publishable results.</em></h3>
+    <p>
+      The evidence base exists. The research tools are validated. The platform is built.
+      What doesn't exist yet is the real-world outcomes data that moves GENA from
+      compelling demo to clinical standard. That's what the pilot generates.
+    </p>
+    <div class="ask-items">
+      <div class="ask-item">
+        <strong>Site</strong>
+        Severe asthma clinic at academic medical center
+      </div>
+      <div class="ask-item">
+        <strong>Scale</strong>
+        50 patients · 12 months
+      </div>
+      <div class="ask-item">
+        <strong>Primary endpoint</strong>
+        Complete phenotyping before biologic initiation
+      </div>
+      <div class="ask-item">
+        <strong>Output</strong>
+        Published outcomes · Payer engagement · Policy case
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<footer>
+  <div class="foot-brand"><strong>GENA</strong> × SIVOTEC &nbsp;·&nbsp; Strategic Pitch &nbsp;·&nbsp; 2026</div>
+  <div class="foot-note">For discussion purposes. Platform demonstrated at laurenmfine-coder.github.io/gena-sivotec-demo. Evidence grades and clinical claims reflect published literature as of 2025–2026.</div>
+</footer>
+
+<script>
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Stage toggle
+function toggleStage(idx) {
+  const stages = document.querySelectorAll('.flow-stage');
+  const details = document.querySelectorAll('.stage-detail');
+  const isOpen = details[idx].classList.contains('open');
+
+  // Close all
+  stages.forEach(s => s.classList.remove('active'));
+  details.forEach(d => d.classList.remove('open'));
+
+  // Open clicked if it was closed
+  if (!isOpen) {
+    stages[idx].classList.add('active');
+    details[idx].classList.add('open');
+    setTimeout(() => {
+      stages[idx].scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }, 100);
+  }
+}
+</script>
+</body>
+</html>

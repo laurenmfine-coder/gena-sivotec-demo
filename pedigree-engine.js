@@ -334,7 +334,7 @@ window.PedigreeEngine = (function() {
   var PED_CSS = `
   /* Float button */
   .ped-float-btn {
-    position: fixed; bottom: 24px; right: 24px; z-index: 400;
+    position: fixed; bottom: 68px; right: 24px; z-index: 400;
     display: flex; align-items: center; gap: 8px;
     padding: 10px 18px; border-radius: 24px;
     background: #1a2e42; border: 1px solid #2874A6;
