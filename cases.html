@@ -1249,7 +1249,7 @@ function openModules(caseId) {
   const m = MODULES[caseId];
   // Set header
   document.getElementById('module-drawer-title').textContent = c.diagnosis || 'Evidence Base';
-  document.getElementById('module-drawer-sub').textContent = 'Pathophysiology &#183; Guidelines &#183; Framework &#183; Evidence &#183; EMR Lens';
+  document.getElementById('module-drawer-sub').innerHTML = 'Pathophysiology &nbsp;&middot;&nbsp; Guidelines &nbsp;&middot;&nbsp; Framework &nbsp;&middot;&nbsp; Evidence &nbsp;&middot;&nbsp; EMR Lens';
   // Build tabs
   const tabDefs = [
     {id:'pathophys', label:'Pathophys', icon:'&#9883;'},
@@ -1284,24 +1284,28 @@ function switchModuleTab(tabId) {
 
 function renderModuleContent(caseId, tabId) {
   var m = MODULES[caseId];
-  if (!m || !m[tabId]) return;
-  var data = m[tabId];
+  if (!m) return;
+  // Support both panels[] array and legacy named-key structure
+  var data = null;
+  if (m.panels) {
+    var tabDefs = ['pathophys','guidelines','framework','evidence','emr'];
+    var idx = tabDefs.indexOf(tabId);
+    if (idx >= 0 && idx < m.panels.length) data = m.panels[idx];
+  } else {
+    data = m[tabId];
+  }
+  if (!data) return;
   var html = '<div class="module-panel active">';
-  html += '<div class="module-section-title">' + data.title + '<\/div>';
-  if (data.body) {
-    html += '<div class="module-body-text">' + data.body + '<\/div>';
+  if (data.title) html += '<div class="module-section-title">' + data.title + '<\/div>';
+  if (data.content) html += data.content;
+  if (data.body) html += '<div class="module-body-text">' + data.body + '<\/div>';
+  if (tabId === 'emr') {
+    html += '<div class="module-emr-note">&#128187; <strong>EMR Integration Note:<\/strong> These structured fields, when consistently populated, enable clinical decision support rules to surface this diagnosis earlier.<\/div>';
   }
-  if (tabId === 'emr' && data.body) {
-    html += '<div class="module-emr-note">&#128187; <strong>EMR Integration Note:<\/strong> These structured fields, when consistently populated, enable clinical decision support rules to surface this diagnosis earlier. They represent the intersection of clinical reasoning education and documentation practice.<\/div>';
-  }
-  if (data.table) {
-    html += buildModuleTable(data.table);
-  }
+  if (data.table) html += buildModuleTable(data.table);
   if (data.refs) {
     html += '<div class="module-refs"><div class="module-refs-label">References<\/div>';
-    data.refs.forEach(function(r) {
-      html += '<div class="module-ref-item">' + r + '<\/div>';
-    });
+    data.refs.forEach(function(r) { html += '<div class="module-ref-item">' + r + '<\/div>'; });
     html += '<\/div>';
   }
   html += '<\/div>';
