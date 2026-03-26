@@ -914,11 +914,10 @@ function updateVisitNav(id) {
 // AI EVALUATION ENGINE
 // ===========================================
 async function evaluateWithAI(questionPrompt, placeholder, userAnswer, caseId, questionId) {
-  const wrapId = 'ai-eval-' + questionId;
-  const wrap = document.getElementById(wrapId);
+  var wrapId = 'ai-eval-' + questionId;
+  var wrap = document.getElementById(wrapId);
   if (!wrap) return;
 
-  // Get refs from module if available
   var refs = [];
   var m = window.MODULES && window.MODULES[caseId];
   if (m && m.panels) {
@@ -936,22 +935,8 @@ async function evaluateWithAI(questionPrompt, placeholder, userAnswer, caseId, q
 
   wrap.innerHTML = '<div class="ai-eval-loading"><div class="ai-eval-spinner"></div>Evaluating your response...</div>';
 
-  var systemPrompt = 'You are a clinical faculty member evaluating a medical learner's written response to a clinical reasoning question. Be specific, educational, and encouraging. Return ONLY valid JSON — no preamble, no markdown, no backticks.';
-
-  var userPrompt = 'Question asked: ' + questionPrompt + '
-
-Key concepts expected (from teaching notes): ' + placeholder + '
-
-Learner's answer: ' + (userAnswer || '[blank]') + '
-
-Evaluate this response and return JSON with exactly these fields:
-{
-  "score": <integer 1-5>,
-  "badge": <"Excellent" | "Good" | "Partial" | "Needs Work">,
-  "narrative": "<2-3 sentence faculty comment — specific to what they wrote, what they got right, what they missed>",
-  "checklist": [{"item": "<key concept>", "covered": <true|false>}, ...] (3-5 items based on expected concepts),
-  "ideal_elements": "<one sentence summarizing the ideal answer>"
-}';
+  var sysPrompt = "You are a clinical faculty member evaluating a medical learner's written response. Be specific and educational. Return ONLY valid JSON, no markdown, no backticks.";
+  var userPrompt = "Question: " + questionPrompt + "\n\nExpected concepts: " + placeholder + "\n\nLearner answer: " + (userAnswer || "[blank]") + "\n\nReturn JSON: {\"score\": <1-5>, \"badge\": <\"Excellent\"|\"Good\"|\"Partial\"|\"Needs Work\">, \"narrative\": \"<2-3 sentence faculty comment>\", \"checklist\": [{\"item\": \"<concept>\", \"covered\": <true|false>}], \"ideal_elements\": \"<one sentence>\"}";
 
   try {
     var resp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -960,82 +945,54 @@ Evaluate this response and return JSON with exactly these fields:
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
-        messages: [{role: 'user', content: userPrompt}],
-        system: systemPrompt
+        system: sysPrompt,
+        messages: [{role: 'user', content: userPrompt}]
       })
     });
     var data = await resp.json();
-    var text = data.content && data.content[0] ? data.content[0].text : '';
+    var text = (data.content && data.content[0]) ? data.content[0].text : '';
     text = text.replace(/```json|```/g,'').trim();
     var result = JSON.parse(text);
-
     var badgeClass = {Excellent:'badge-excellent',Good:'badge-good',Partial:'badge-partial','Needs Work':'badge-needs-work'}[result.badge] || 'badge-good';
     var scoreColor = result.score >= 4 ? '#1e8449' : result.score === 3 ? '#2874A6' : '#c0392b';
-
     var html = '<div class="ai-eval-result">';
-    html += '<div class="ai-eval-header">';
-    html += '<div class="ai-eval-score" style="color:' + scoreColor + '">' + result.score + '<span>/5</span></div>';
-    html += '<span class="ai-eval-badge ' + badgeClass + '">' + result.badge + '</span>';
-    html += '</div>';
+    html += '<div class="ai-eval-header"><div class="ai-eval-score" style="color:' + scoreColor + '">' + result.score + '<span>/5</span></div><span class="ai-eval-badge ' + badgeClass + '">' + result.badge + '</span></div>';
     html += '<div class="ai-eval-narrative">' + result.narrative + '</div>';
-
     if (result.checklist && result.checklist.length) {
       html += '<div class="ai-eval-checklist">';
-      result.checklist.forEach(function(c) {
-        html += '<div class="ai-check-item"><span class="ai-check-icon">' + (c.covered ? '✅' : '⬜') + '</span><span>' + c.item + '</span></div>';
-      });
+      result.checklist.forEach(function(c) { html += '<div class="ai-check-item"><span class="ai-check-icon">' + (c.covered ? '&#9989;' : '&#11036;') + '</span><span>' + c.item + '</span></div>'; });
       html += '</div>';
     }
-
     if (result.ideal_elements) {
       html += '<div style="font-size:12px;color:var(--neutral-mid);margin-bottom:10px;padding:8px 12px;background:rgba(40,116,166,0.06);border-radius:4px;"><strong>Complete answer includes:</strong> ' + result.ideal_elements + '</div>';
     }
-
     if (refs.length) {
       html += '<div class="ai-eval-refs"><div class="ai-eval-refs-label">References</div>';
-      refs.forEach(function(r) { html += '<div class="ai-eval-ref-item">📄 ' + r + '</div>'; });
+      refs.forEach(function(r) { html += '<div class="ai-eval-ref-item">&#128196; ' + r + '</div>'; });
       html += '</div>';
     }
-
     html += '</div>';
     wrap.innerHTML = html;
-
   } catch(e) {
-    wrap.innerHTML = '<div class="ai-eval-result"><div class="ai-eval-narrative">Could not load AI evaluation. Please check your API key is configured in the EMR Simulator, or review the teaching points below.</div></div>';
+    wrap.innerHTML = '<div class="ai-eval-result"><div class="ai-eval-narrative">AI evaluation unavailable. Review the teaching points below.</div></div>';
   }
 }
 
 async function evaluateDecisionWithAI(caseId, visitIdx, userAnswer) {
-  const c = CASES[caseId];
-  const v = c.visits[visitIdx];
-  const wrapId = 'dec-ai-eval-' + caseId;
-  const wrap = document.getElementById(wrapId);
+  var c = CASES[caseId];
+  var v = c.visits[visitIdx];
+  var wrapId = 'dec-ai-eval-' + caseId;
+  var wrap = document.getElementById(wrapId);
   if (!wrap) return;
 
   wrap.innerHTML = '<div class="ai-eval-loading"><div class="ai-eval-spinner"></div>Evaluating your management plan...</div>';
 
-  var idealAnswer = v.choices.find(function(ch){ return ch.outcome === 'good'; });
+  var idealAnswer = v.choices ? v.choices.find(function(ch){ return ch.outcome === 'good'; }) : null;
   var idealText = idealAnswer ? idealAnswer.text : '';
   var caseTitle = c.diagnosis || c.title || caseId;
 
-  var systemPrompt = 'You are a clinical faculty member evaluating a medical learner's management plan for a clinical case. Be specific, constructive, and educational. Return ONLY valid JSON — no preamble, no markdown, no backticks.';
-
-  var userPrompt = 'Case: ' + caseTitle + '
-
-Management scenario: ' + v.scenario + '
-
-Ideal management elements: ' + idealText + '
-
-Learner's management plan: ' + (userAnswer || '[blank]') + '
-
-Return JSON with exactly:
-{
-  "score": <integer 1-5>,
-  "badge": <"Excellent" | "Good" | "Partial" | "Needs Work">,
-  "narrative": "<2-3 sentence faculty comment specific to what they included and missed>",
-  "checklist": [{"item": "<management element>", "covered": <true|false>}] (4-6 items),
-  "missed_critical": "<most important thing they missed, if any — null if score >= 4>"
-}';
+  var sysPrompt = "You are a clinical faculty member evaluating a medical learner's management plan. Be constructive and educational. Return ONLY valid JSON, no markdown, no backticks.";
+  var userPrompt = "Case: " + caseTitle + "\n\nIdeal management: " + idealText + "\n\nLearner plan: " + (userAnswer || "[blank]") + "\n\nReturn JSON: {\"score\": <1-5>, \"badge\": <\"Excellent\"|\"Good\"|\"Partial\"|\"Needs Work\">, \"narrative\": \"<2-3 sentence faculty comment>\", \"checklist\": [{\"item\": \"<element>\", \"covered\": <true|false>}], \"missed_critical\": \"<most important missed item or null>\"}";
 
   try {
     var resp = await fetch('https://api.anthropic.com/v1/messages', {
@@ -1044,53 +1001,38 @@ Return JSON with exactly:
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
-        messages: [{role: 'user', content: userPrompt}],
-        system: systemPrompt
+        system: sysPrompt,
+        messages: [{role: 'user', content: userPrompt}]
       })
     });
     var data = await resp.json();
-    var text = data.content && data.content[0] ? data.content[0].text : '';
+    var text = (data.content && data.content[0]) ? data.content[0].text : '';
     text = text.replace(/```json|```/g,'').trim();
     var result = JSON.parse(text);
-
     var badgeClass = {Excellent:'badge-excellent',Good:'badge-good',Partial:'badge-partial','Needs Work':'badge-needs-work'}[result.badge] || 'badge-good';
     var scoreColor = result.score >= 4 ? '#1e8449' : result.score === 3 ? '#2874A6' : '#c0392b';
-
     var html = '<div class="ai-eval-result">';
-    html += '<div class="ai-eval-header">';
-    html += '<div class="ai-eval-score" style="color:' + scoreColor + '">' + result.score + '<span>/5</span></div>';
-    html += '<span class="ai-eval-badge ' + badgeClass + '">' + result.badge + '</span>';
-    html += '</div>';
+    html += '<div class="ai-eval-header"><div class="ai-eval-score" style="color:' + scoreColor + '">' + result.score + '<span>/5</span></div><span class="ai-eval-badge ' + badgeClass + '">' + result.badge + '</span></div>';
     html += '<div class="ai-eval-narrative">' + result.narrative + '</div>';
-
     if (result.checklist && result.checklist.length) {
       html += '<div class="ai-eval-checklist">';
-      result.checklist.forEach(function(c) {
-        html += '<div class="ai-check-item"><span class="ai-check-icon">' + (c.covered ? '✅' : '⬜') + '</span><span>' + c.item + '</span></div>';
-      });
+      result.checklist.forEach(function(c) { html += '<div class="ai-check-item"><span class="ai-check-icon">' + (c.covered ? '&#9989;' : '&#11036;') + '</span><span>' + c.item + '</span></div>'; });
       html += '</div>';
     }
-
     if (result.missed_critical) {
       html += '<div style="font-size:12.5px;color:#c0392b;padding:8px 12px;background:#fdf2f2;border-radius:4px;border-left:3px solid #c0392b;margin-bottom:8px;"><strong>Critical gap:</strong> ' + result.missed_critical + '</div>';
     }
-
     html += '</div>';
     wrap.innerHTML = html;
-
-    // Now show the comparison choices
     var compareEl = document.getElementById('dec-compare-' + caseId);
     if (compareEl) {
       compareEl.style.display = 'block';
       setTimeout(function(){ compareEl.scrollIntoView({behavior:'smooth',block:'nearest'}); }, 200);
     }
-
-    // Show debrief button
     var db = document.getElementById('to-debrief-' + caseId);
     if (db) db.style.display = 'block';
-
   } catch(e) {
-    wrap.innerHTML = '<div class="ai-eval-result"><div class="ai-eval-narrative">Could not load AI evaluation. Review the management options below.</div></div>';
+    wrap.innerHTML = '<div class="ai-eval-result"><div class="ai-eval-narrative">AI evaluation unavailable. Review the management options below.</div></div>';
     var compareEl = document.getElementById('dec-compare-' + caseId);
     if (compareEl) compareEl.style.display = 'block';
     var db = document.getElementById('to-debrief-' + caseId);
