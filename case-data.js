@@ -1799,18 +1799,9 @@ window.CASES['H6A'] = {
       scenario:'Jordan is admitted for monitoring and initiation of therapy. Genetic testing confirms: <strong>RYR2 c.7420G>A (p.Val2474Ile) — Pathogenic, heterozygous.</strong><br><br>He needs immediate treatment decisions. His mother asks: "Is he going to be okay? Can he ever play basketball again?"<br><br>Three management decisions must be made simultaneously:<br>1. Medical therapy<br>2. Device consideration<br>3. Activity restriction and return-to-sport counseling<br><br>Choose the management approach:',
       decisionPrompt:true,
       choices:[
-        {
-          text:'Beta blocker (nadolol preferred) + ICD implantation + permanent restriction from competitive sport. Genetic testing for mother and sister today.',
-          outcome:'good'
-        },
-        {
-          text:'Beta blocker alone. Reassure family that with medication compliance Jordan can return to all sports. Genetic testing can be arranged outpatient.',
-          outcome:'bad'
-        },
-        {
-          text:'ICD implantation only — no beta blocker needed if device is in place. Sports restriction until device confirmed working.',
-          outcome:'partial'
-        }
+        {text:'Nadolol + ICD + permanent sports restriction. Family genetic testing for mother and sister today.',outcome:'good'},
+        {text:'Nadolol alone. With medication compliance, Jordan can return to sports. Genetic testing outpatient.',outcome:'bad'},
+        {text:'ICD only — beta blocker unnecessary with device in place. Sports restriction until device confirmed.',outcome:'partial'}
       ],
       outcomes:{
         good:'<strong>Correct management.</strong> Nadolol is the preferred beta blocker for CPVT (superior to metoprolol based on evidence). ICD is indicated given the documented hemodynamically significant VT — it is the backstop if medical therapy fails. Permanent restriction from competitive sport is guideline-recommended for CPVT regardless of medical therapy or ICD. The family genetic testing is urgent — the sister cannot play soccer until her RYR2 status and exercise response are known.',
@@ -1873,9 +1864,9 @@ window.CASES['H6B'] = {
       scenario:'Maya\'s workup is complete. Vasovagal syncope is confirmed clinically. Choose the management plan:',
       decisionPrompt:true,
       choices:[
-        {text:'Behavioral modification counseling + return precautions. No medications. No cardiology referral. Follow-up in 3 months or sooner if recurrence with atypical features.', outcome:'good'},
-        {text:'Refer to cardiology for tilt-table testing and Holter monitor before concluding this is benign.', outcome:'bad'},
-        {text:'Prescribe fludrocortisone empirically for orthostatic component even without confirmed orthostatic hypotension.', outcome:'partial'}
+        {text:'Behavioral modification + return precautions. No medications, no cardiology referral. Follow-up in 3 months.',outcome:'good'},
+        {text:'Cardiology referral for tilt-table testing and Holter before concluding this is benign.',outcome:'bad'},
+        {text:'Fludrocortisone for orthostatic component — start empirically before confirming orthostatic hypotension.',outcome:'partial'}
       ],
       outcomes:{
         good:'<strong>Correct.</strong> Classic vasovagal syncope in an adolescent with a clear trigger and full recovery requires no additional workup and no medication. Behavioral modification is first-line. Return precautions are appropriate — if she has an episode without a clear vasovagal trigger, or an exertional episode, reconsider the diagnosis.',
@@ -1937,9 +1928,9 @@ window.CASES['H6C'] = {
       scenario:'Ethan and his parents sit in your office. The echocardiogram is on the screen. Ethan has been playing football since age 8. He is crying. His mother is asking about medications. His father — who had a myectomy at 38 — is trying to explain what the surgery felt like. Choose the management plan:',
       decisionPrompt:true,
       choices:[
-        {text:'Beta blocker or verapamil for symptom management + restriction from football and high-intensity contact sports + referral to HCM specialist center + ICD evaluation + sister evaluated before next gymnastics session.', outcome:'good'},
-        {text:'ICD implantation now + cleared for non-contact sports + beta blocker + sister can wait until summer for evaluation.', outcome:'partial'},
-        {text:'No medications yet — reassure family that many HCM patients do fine without treatment. He can continue football with a defibrillator vest. Recheck echo in 6 months.', outcome:'bad'}
+        {text:'Beta blocker + sports restriction + HCM specialist referral + ICD evaluation. Sister evaluated before next gymnastics session.',outcome:'good'},
+        {text:'ICD now + cleared for non-contact sports + beta blocker. Sister can wait until summer.',outcome:'partial'},
+        {text:'Reassure family — many HCM patients do well. Continue football with defibrillator vest. Recheck echo in 6 months.',outcome:'bad'}
       ],
       outcomes:{
         good:'<strong>Correct comprehensive management.</strong> Medical therapy addresses symptoms and reduces obstruction. Sports restriction is indicated for obstructive HCM with this gradient. HCM specialist center referral optimizes the complex management decisions including ICD threshold and long-term monitoring. The sister\'s urgency is correctly prioritized — she cannot wait.',

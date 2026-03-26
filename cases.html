@@ -150,6 +150,35 @@ a{color:var(--ocean);}
 .dchoice.partial{border-color:var(--orange);background:var(--orange-light);color:var(--orange);}
 .dchoice.dimmed{opacity:.35;pointer-events:none;}
 .dchoice-letter{min-width:24px;height:24px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:2px;opacity:.65;}
+/* AI Evaluation */
+.ai-eval-wrap{margin-top:16px;border-radius:8px;overflow:hidden;border:1px solid var(--border);}
+.ai-eval-loading{padding:20px 22px;background:#f8f9fc;display:flex;align-items:center;gap:12px;font-size:13px;color:var(--neutral-mid);}
+.ai-eval-spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--ocean);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-eval-result{padding:20px 22px;background:#f8fffe;}
+.ai-eval-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.ai-eval-score{font-size:28px;font-weight:700;color:var(--ocean);font-family:inherit;}
+.ai-eval-score span{font-size:14px;font-weight:400;color:var(--neutral-mid);}
+.ai-eval-badge{padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;letter-spacing:.04em;}
+.badge-excellent{background:#d4edda;color:#155724;}
+.badge-good{background:#cce5ff;color:#004085;}
+.badge-partial{background:#fff3cd;color:#856404;}
+.badge-needs-work{background:#f8d7da;color:#721c24;}
+.ai-eval-narrative{font-size:13.5px;color:var(--neutral-dark);line-height:1.7;margin-bottom:14px;padding:12px 14px;background:white;border-radius:6px;border-left:3px solid var(--ocean);}
+.ai-eval-checklist{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.ai-check-item{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--neutral-dark);line-height:1.5;}
+.ai-check-icon{flex-shrink:0;margin-top:1px;font-size:14px;}
+.ai-eval-refs{padding-top:12px;border-top:1px solid var(--border);}
+.ai-eval-refs-label{font-size:10px;font-weight:700;color:var(--neutral-mid);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;}
+.ai-eval-ref-item{font-size:11.5px;color:var(--neutral-mid);line-height:1.5;margin-bottom:3px;}
+/* Decision free text */
+.decision-freetext-wrap{padding:16px 22px;}
+.decision-freetext-label{font-size:12px;font-weight:600;color:var(--neutral-dark);margin-bottom:8px;}
+.decision-freetext-ta{width:100%;min-height:120px;padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:13.5px;color:var(--neutral-dark);resize:vertical;transition:border-color .2s;background:white;}
+.decision-freetext-ta:focus{outline:none;border-color:var(--ocean);}
+.decision-submit-row{display:flex;justify-content:flex-end;margin-top:10px;}
+.decision-compare{margin-top:16px;padding:14px 18px;background:#f4f6f7;border-radius:8px;}
+.decision-compare-label{font-size:10px;font-weight:700;color:var(--neutral-mid);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
 
 /* outcome */
 .outcome-box{display:none;margin:0 22px 16px;padding:14px 18px;border-radius:8px;font-size:13.5px;line-height:1.65;}
@@ -882,6 +911,194 @@ function updateVisitNav(id) {
 }
 
 // ===========================================
+// AI EVALUATION ENGINE
+// ===========================================
+async function evaluateWithAI(questionPrompt, placeholder, userAnswer, caseId, questionId) {
+  const wrapId = 'ai-eval-' + questionId;
+  const wrap = document.getElementById(wrapId);
+  if (!wrap) return;
+
+  // Get refs from module if available
+  var refs = [];
+  var m = window.MODULES && window.MODULES[caseId];
+  if (m && m.panels) {
+    m.panels.forEach(function(p) {
+      if (p.content) {
+        var refMatch = p.content.match(/module-ref-item[^>]*>([^<]+)/g);
+        if (refMatch) refMatch.forEach(function(r) {
+          var txt = r.replace(/<[^>]+>/g,'').trim();
+          if (txt && refs.indexOf(txt) === -1) refs.push(txt);
+        });
+      }
+    });
+  }
+  refs = refs.slice(0, 3);
+
+  wrap.innerHTML = '<div class="ai-eval-loading"><div class="ai-eval-spinner"></div>Evaluating your response...</div>';
+
+  var systemPrompt = 'You are a clinical faculty member evaluating a medical learner's written response to a clinical reasoning question. Be specific, educational, and encouraging. Return ONLY valid JSON — no preamble, no markdown, no backticks.';
+
+  var userPrompt = 'Question asked: ' + questionPrompt + '
+
+Key concepts expected (from teaching notes): ' + placeholder + '
+
+Learner's answer: ' + (userAnswer || '[blank]') + '
+
+Evaluate this response and return JSON with exactly these fields:
+{
+  "score": <integer 1-5>,
+  "badge": <"Excellent" | "Good" | "Partial" | "Needs Work">,
+  "narrative": "<2-3 sentence faculty comment — specific to what they wrote, what they got right, what they missed>",
+  "checklist": [{"item": "<key concept>", "covered": <true|false>}, ...] (3-5 items based on expected concepts),
+  "ideal_elements": "<one sentence summarizing the ideal answer>"
+}';
+
+  try {
+    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{role: 'user', content: userPrompt}],
+        system: systemPrompt
+      })
+    });
+    var data = await resp.json();
+    var text = data.content && data.content[0] ? data.content[0].text : '';
+    text = text.replace(/```json|```/g,'').trim();
+    var result = JSON.parse(text);
+
+    var badgeClass = {Excellent:'badge-excellent',Good:'badge-good',Partial:'badge-partial','Needs Work':'badge-needs-work'}[result.badge] || 'badge-good';
+    var scoreColor = result.score >= 4 ? '#1e8449' : result.score === 3 ? '#2874A6' : '#c0392b';
+
+    var html = '<div class="ai-eval-result">';
+    html += '<div class="ai-eval-header">';
+    html += '<div class="ai-eval-score" style="color:' + scoreColor + '">' + result.score + '<span>/5</span></div>';
+    html += '<span class="ai-eval-badge ' + badgeClass + '">' + result.badge + '</span>';
+    html += '</div>';
+    html += '<div class="ai-eval-narrative">' + result.narrative + '</div>';
+
+    if (result.checklist && result.checklist.length) {
+      html += '<div class="ai-eval-checklist">';
+      result.checklist.forEach(function(c) {
+        html += '<div class="ai-check-item"><span class="ai-check-icon">' + (c.covered ? '✅' : '⬜') + '</span><span>' + c.item + '</span></div>';
+      });
+      html += '</div>';
+    }
+
+    if (result.ideal_elements) {
+      html += '<div style="font-size:12px;color:var(--neutral-mid);margin-bottom:10px;padding:8px 12px;background:rgba(40,116,166,0.06);border-radius:4px;"><strong>Complete answer includes:</strong> ' + result.ideal_elements + '</div>';
+    }
+
+    if (refs.length) {
+      html += '<div class="ai-eval-refs"><div class="ai-eval-refs-label">References</div>';
+      refs.forEach(function(r) { html += '<div class="ai-eval-ref-item">📄 ' + r + '</div>'; });
+      html += '</div>';
+    }
+
+    html += '</div>';
+    wrap.innerHTML = html;
+
+  } catch(e) {
+    wrap.innerHTML = '<div class="ai-eval-result"><div class="ai-eval-narrative">Could not load AI evaluation. Please check your API key is configured in the EMR Simulator, or review the teaching points below.</div></div>';
+  }
+}
+
+async function evaluateDecisionWithAI(caseId, visitIdx, userAnswer) {
+  const c = CASES[caseId];
+  const v = c.visits[visitIdx];
+  const wrapId = 'dec-ai-eval-' + caseId;
+  const wrap = document.getElementById(wrapId);
+  if (!wrap) return;
+
+  wrap.innerHTML = '<div class="ai-eval-loading"><div class="ai-eval-spinner"></div>Evaluating your management plan...</div>';
+
+  var idealAnswer = v.choices.find(function(ch){ return ch.outcome === 'good'; });
+  var idealText = idealAnswer ? idealAnswer.text : '';
+  var caseTitle = c.diagnosis || c.title || caseId;
+
+  var systemPrompt = 'You are a clinical faculty member evaluating a medical learner's management plan for a clinical case. Be specific, constructive, and educational. Return ONLY valid JSON — no preamble, no markdown, no backticks.';
+
+  var userPrompt = 'Case: ' + caseTitle + '
+
+Management scenario: ' + v.scenario + '
+
+Ideal management elements: ' + idealText + '
+
+Learner's management plan: ' + (userAnswer || '[blank]') + '
+
+Return JSON with exactly:
+{
+  "score": <integer 1-5>,
+  "badge": <"Excellent" | "Good" | "Partial" | "Needs Work">,
+  "narrative": "<2-3 sentence faculty comment specific to what they included and missed>",
+  "checklist": [{"item": "<management element>", "covered": <true|false>}] (4-6 items),
+  "missed_critical": "<most important thing they missed, if any — null if score >= 4>"
+}';
+
+  try {
+    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{role: 'user', content: userPrompt}],
+        system: systemPrompt
+      })
+    });
+    var data = await resp.json();
+    var text = data.content && data.content[0] ? data.content[0].text : '';
+    text = text.replace(/```json|```/g,'').trim();
+    var result = JSON.parse(text);
+
+    var badgeClass = {Excellent:'badge-excellent',Good:'badge-good',Partial:'badge-partial','Needs Work':'badge-needs-work'}[result.badge] || 'badge-good';
+    var scoreColor = result.score >= 4 ? '#1e8449' : result.score === 3 ? '#2874A6' : '#c0392b';
+
+    var html = '<div class="ai-eval-result">';
+    html += '<div class="ai-eval-header">';
+    html += '<div class="ai-eval-score" style="color:' + scoreColor + '">' + result.score + '<span>/5</span></div>';
+    html += '<span class="ai-eval-badge ' + badgeClass + '">' + result.badge + '</span>';
+    html += '</div>';
+    html += '<div class="ai-eval-narrative">' + result.narrative + '</div>';
+
+    if (result.checklist && result.checklist.length) {
+      html += '<div class="ai-eval-checklist">';
+      result.checklist.forEach(function(c) {
+        html += '<div class="ai-check-item"><span class="ai-check-icon">' + (c.covered ? '✅' : '⬜') + '</span><span>' + c.item + '</span></div>';
+      });
+      html += '</div>';
+    }
+
+    if (result.missed_critical) {
+      html += '<div style="font-size:12.5px;color:#c0392b;padding:8px 12px;background:#fdf2f2;border-radius:4px;border-left:3px solid #c0392b;margin-bottom:8px;"><strong>Critical gap:</strong> ' + result.missed_critical + '</div>';
+    }
+
+    html += '</div>';
+    wrap.innerHTML = html;
+
+    // Now show the comparison choices
+    var compareEl = document.getElementById('dec-compare-' + caseId);
+    if (compareEl) {
+      compareEl.style.display = 'block';
+      setTimeout(function(){ compareEl.scrollIntoView({behavior:'smooth',block:'nearest'}); }, 200);
+    }
+
+    // Show debrief button
+    var db = document.getElementById('to-debrief-' + caseId);
+    if (db) db.style.display = 'block';
+
+  } catch(e) {
+    wrap.innerHTML = '<div class="ai-eval-result"><div class="ai-eval-narrative">Could not load AI evaluation. Review the management options below.</div></div>';
+    var compareEl = document.getElementById('dec-compare-' + caseId);
+    if (compareEl) compareEl.style.display = 'block';
+    var db = document.getElementById('to-debrief-' + caseId);
+    if (db) db.style.display = 'block';
+  }
+}
+
+// ===========================================
 // BUILD VISIT
 // ===========================================
 function buildVisit(id, visitIdx) {
@@ -923,6 +1140,7 @@ function buildVisit(id, visitIdx) {
           '<div class="q-label">Question ' + (qi+1) + ' of ' + v.questions.length + '<\/div>' +
           '<div class="q-prompt">' + q.prompt + '<\/div>' +
           '<textarea class="q-textarea" id="' + q.id + '" placeholder="' + q.placeholder + '"><\/textarea>' +
+          '<div class="ai-eval-wrap" id="ai-eval-' + q.id + '" style="display:none"></div>' +
         '<\/div>';
     });
 
@@ -966,23 +1184,33 @@ function buildVisit(id, visitIdx) {
         '<div class="decision-scenario">' + v.decisionPrompt + '<\/div>' +
         '<div class="decision-choices">';
 
+    // Free text management plan
+    html += '<\/div>';
+    html += '<div class="decision-freetext-wrap">';
+    html += '<div class="decision-freetext-label">Write your management plan:</div>';
+    html += '<textarea class="decision-freetext-ta" id="dec-ta-' + id + '" placeholder="What would you do next? Include: specific treatments, referrals, testing, counseling, and any urgent actions..."></textarea>';
+    html += '<div class="decision-submit-row"><button class="q-submit" onclick="submitDecision(\'' + id + '\',' + visitIdx + ')">Submit Management Plan &#8594;<\/button><\/div>';
+    html += '<div class="ai-eval-wrap" id="dec-ai-eval-' + id + '" style="display:none;margin-top:0;border-radius:0 0 8px 8px;"><\/div>';
+    html += '<\/div>';
+
+    // Comparison choices — shown AFTER submission
+    html += '<div class="decision-compare" id="dec-compare-' + id + '" style="display:none">';
+    html += '<div class="decision-compare-label">How do these options compare?<\/div>';
     v.choices.forEach(function(ch, ci) {
-      html += '<button class="dchoice" id="dc-' + id + '-' + ci + '" onclick="makeDecision(\'' + id + '\',' + visitIdx + ',' + ci + ',\'' + ch.outcome + '\')">' +
-        '<span class="dchoice-letter">' + String.fromCharCode(65+ci) + '<\/span>' + ch.text + '<\/button>';
+      var outcomeLabel = ch.outcome === 'good' ? '✅ Strong' : ch.outcome === 'partial' ? '🔶 Partial' : '❌ Incomplete';
+      html += '<div class="dchoice ' + ch.outcome + '" style="cursor:default;margin-bottom:8px;">' +
+        '<span class="dchoice-letter">' + String.fromCharCode(65+ci) + '<\/span>' +
+        '<div><div style="font-size:10px;font-weight:700;margin-bottom:3px;">' + outcomeLabel + '<\/div>' + ch.text + '<\/div><\/div>';
+    });
+
+    // Outcome explanations
+    ['good','bad','partial'].forEach(function(o) {
+      html += '<div class="outcome-box ' + o + ' show" style="margin-top:8px;" id="out-' + id + '-' + o + '">' +
+        '<div class="outcome-title">' + (o==='good'?'&#10003; Strong Reasoning':o==='bad'?'&#9888; Incomplete':'&#8635; Partial') + '<\/div>' +
+        v.outcomes[o] + '<\/div>';
     });
 
     html += '<\/div>';
-
-    ['good','bad','partial'].forEach(function(o) {
-      html += '<div class="outcome-box ' + o + '" id="out-' + id + '-' + o + '">' +
-        '<div class="outcome-title">' + (o==='good'?'&#10003; Strong Reasoning':o==='bad'?'&#9888; Missed':'&#8635; Partial') + '<\/div>' +
-        v.outcomes[o] +
-        '<div class="key-finding"><strong>Key findings in this case:<\/strong><ul style="margin-top:6px;margin-left:16px;">' +
-        v.keyFindings.map(function(kf){ return '<li style="margin-bottom:4px;font-size:12.5px;">' + kf + '<\/li>'; }).join('') +
-        '<\/ul><\/div>' +
-      '<\/div>';
-    });
-
     html += '<button class="next-visit-btn" id="to-debrief-' + id + '" style="display:none;margin:0 22px 20px" onclick="showDebrief(\'' + id + '\')">See Diagnosis &amp; Full Debrief &#8594;<\/button>';
     html += '<\/div>';
   }
@@ -998,11 +1226,18 @@ function submitVisit(id, visitIdx) {
   const v = c.visits[visitIdx];
   const state = caseState[id];
 
-  // Store responses
+  // Store responses and trigger AI evaluation
   v.questions.forEach(function(q) {
     const el = document.getElementById(q.id);
-    state.responses[q.id] = el ? el.value.trim() : '';
+    const answer = el ? el.value.trim() : '';
+    state.responses[q.id] = answer;
     if (el) { el.disabled = true; el.style.background = '#f4f6f7'; }
+    // Show and trigger AI eval
+    const evalWrap = document.getElementById('ai-eval-' + q.id);
+    if (evalWrap) {
+      evalWrap.style.display = 'block';
+      evaluateWithAI(q.prompt, q.placeholder, answer, id, q.id);
+    }
   });
 
   // Disable submit button
@@ -1078,6 +1313,28 @@ function makeDecision(id, visitIdx, choiceIdx, outcome) {
       if (outEl) outEl.scrollIntoView({behavior:'smooth',block:'nearest'});
     }, 150);
   }
+}
+
+// ===========================================
+// SUBMIT DECISION (free text)
+// ===========================================
+function submitDecision(id, visitIdx) {
+  const ta = document.getElementById('dec-ta-' + id);
+  if (!ta) return;
+  const answer = ta.value.trim();
+  ta.disabled = true;
+  ta.style.background = '#f4f6f7';
+
+  // Hide submit button
+  const btn = ta.parentElement ? ta.parentElement.querySelector('.q-submit') : null;
+  if (btn) btn.style.display = 'none';
+
+  // Show AI eval panel
+  const evalWrap = document.getElementById('dec-ai-eval-' + id);
+  if (evalWrap) evalWrap.style.display = 'block';
+
+  // Fire AI evaluation
+  evaluateDecisionWithAI(id, visitIdx, answer);
 }
 
 // ===========================================
