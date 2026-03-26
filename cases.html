@@ -832,8 +832,9 @@ function setFeedback(mode) {
 var currentFamily = 1;
 function showFamily(n) {
   currentFamily = n;
-  [1,2,3,4,5].forEach(function(i){
-    document.getElementById('ftab-' + i).classList.toggle('active', i === n);
+  [1,2,3,4,5,6].forEach(function(i){
+    var tab = document.getElementById('ftab-' + i);
+    if (tab) tab.classList.toggle('active', i === n);
     var panel = document.getElementById('family-' + i);
     if (panel) panel.style.display = (i === n) ? 'block' : 'none';
   });
