@@ -632,3 +632,96 @@ window.PEDIGREES['G5E'] = {
 })();
 
 console.log('CC5 pedigrees loaded: G5A, G5B, G5C, G5D, G5E');
+
+// ════════════════════════════════════════════════════════════
+// PEDIGREE DATA — Family 6: Pediatric Cardiac / Syncope
+// ════════════════════════════════════════════════════════════
+
+window.PEDIGREES['H6A'] = {
+  caseId: 'H6A',
+  title: 'Jordan Mitchell — CPVT Family Pedigree',
+  subtitle: 'RYR2 c.7420G>A (p.Val2474Ile) — Pathogenic · X-linked pattern NOT applicable — Autosomal dominant',
+  nodes: [
+    // Generation I — Grandparents
+    { id:'GI_1', gen:1, pos:1, sex:'M', status:'unknown', label:'Grandfather\nPaternal', age:'72', detail:'No cardiac history reported' },
+    { id:'GI_2', gen:1, pos:2, sex:'F', status:'unknown', label:'Grandmother\nPaternal', age:'70', detail:'No cardiac history reported' },
+    { id:'GI_3', gen:1, pos:3, sex:'M', status:'affected', label:'Eduardo\nMaternal grandfather', age:'Died 58', detail:'Kidney disease, "burning hands" — possible Fabry mimic but no genetic testing. Died of cardiac event age 58. RETROSPECTIVELY: likely RYR2 carrier with late-onset VT.' },
+    { id:'GI_4', gen:1, pos:4, sex:'F', status:'unknown', label:'Grandmother\nMaternal', age:'74', detail:'No cardiac history. Never evaluated.' },
+
+    // Generation II — Parents + uncle
+    { id:'GII_1', gen:2, pos:1, sex:'M', status:'unaffected', label:'David\nFather', age:'44', detail:'No syncope. Never evaluated. 50% chance of RYR2 variant — paternal line appears unaffected.' },
+    { id:'GII_2', gen:2, pos:2, sex:'F', status:'carrier', label:'Michelle\nMother', age:'41', detail:'No syncope. Obligate carrier candidate — Eduardo\'s daughter. RYR2 testing PENDING. May be asymptomatic carrier (reduced penetrance in females possible). URGENT: test before clearing for strenuous activity.' },
+    { id:'GII_3', gen:2, pos:3, sex:'M', status:'deceased', label:'Uncle Marcus\nMaternal', age:'Died 19', detail:'SUDDEN CARDIAC DEATH during high school track meet. Cause listed: "cardiac arrhythmia, undetermined." No autopsy genetic testing. Almost certainly CPVT — same RYR2 variant. His death was preventable with cascade testing.', highlight: true },
+
+    // Generation III — Jordan + sister
+    { id:'GIII_1', gen:3, pos:1, sex:'M', status:'affected', label:'Jordan\n★ Index Case', age:'14', detail:'CPVT confirmed. RYR2 c.7420G>A pathogenic variant. Three documented exertional/emotional syncopal episodes. Bidirectional VT at HR 148 on exercise stress test. Management: nadolol + ICD + permanent sports restriction.', highlight: true },
+    { id:'GIII_2', gen:3, pos:2, sex:'F', status:'atrisk', label:'Sister\n(Unnamed)', age:'11', detail:'Currently plays soccer. RYR2 testing ORDERED — results pending. Exercise stress test planned after genetic result. CANNOT PLAY SOCCER until evaluated. 50% chance of inheriting variant from mother.' }
+  ],
+  connections: [
+    { from:'GI_1', to:'GII_1', type:'parent' },
+    { from:'GI_2', to:'GII_1', type:'parent' },
+    { from:'GI_3', to:'GII_2', type:'parent' },
+    { from:'GI_3', to:'GII_3', type:'parent' },
+    { from:'GI_4', to:'GII_2', type:'parent' },
+    { from:'GI_4', to:'GII_3', type:'parent' },
+    { from:'GII_1', to:'GIII_1', type:'parent' },
+    { from:'GII_2', to:'GIII_1', type:'parent' },
+    { from:'GII_1', to:'GIII_2', type:'parent' },
+    { from:'GII_2', to:'GIII_2', type:'parent' }
+  ],
+  cascadeTesting: [
+    { member:'Michelle (Mother)', test:'RYR2 gene sequencing', priority:'urgent', reason:'Obligate carrier candidate — Eduardo\'s daughter. Asymptomatic carriers can have arrhythmias during extreme exertion.' },
+    { member:'Sister (age 11)', test:'RYR2 gene sequencing + exercise stress test if positive', priority:'urgent', reason:'Currently active in soccer. 50% carrier risk. Cannot be cleared for sport until evaluated.' },
+    { member:'David (Father)', test:'RYR2 gene sequencing', priority:'high', reason:'50% chance of carrying variant from paternal line. Never evaluated.' },
+    { member:'Uncle Marcus (deceased)', test:'Post-mortem tissue genetic testing if available', priority:'routine', reason:'Confirm RYR2 as cause of death — important for family and for medical record.' }
+  ],
+  teachingPoints: [
+    'Uncle Marcus died at 19 during a track meet. Jordan\'s diagnosis — if made at his first syncopal episode — would have triggered cascade testing that should have happened 25 years ago.',
+    'A normal resting ECG is the hallmark of CPVT, not the all-clear. Exercise stress testing is required when the trigger pattern is adrenergic.',
+    'The sister is the most urgent action item. She is currently playing soccer with a 50% chance of carrying a variant that causes sudden cardiac death during exercise.',
+    'Autosomal dominant with variable penetrance — Michelle has never fainted but may still carry the variant. Carrier females can have arrhythmias, particularly during extreme exertion or pregnancy.'
+  ]
+};
+
+window.PEDIGREES['H6C'] = {
+  caseId: 'H6C',
+  title: 'Ethan Brooks — HCM Family Pedigree',
+  subtitle: 'MYBPC3 c.3737+1G>A — Pathogenic · Autosomal dominant · 50% first-degree relative risk',
+  nodes: [
+    // Generation I
+    { id:'GI_1', gen:1, pos:1, sex:'M', status:'unknown', label:'Grandfather\nPaternal', age:'71', detail:'No known cardiac history. MYBPC3 penetrance is variable — could be asymptomatic carrier.' },
+    { id:'GI_2', gen:1, pos:2, sex:'F', status:'unknown', label:'Grandmother\nPaternal', age:'69', detail:'No known cardiac history.' },
+    { id:'GI_3', gen:1, pos:3, sex:'M', status:'affected', label:'Grandfather\nMaternal', age:'Died 52', detail:'Died of "sudden heart attack." No autopsy. Retroactively: likely HCM with lethal arrhythmia.', highlight:true },
+    { id:'GI_4', gen:1, pos:4, sex:'F', status:'unknown', label:'Grandmother\nMaternal', age:'68', detail:'No cardiac history. Never evaluated.' },
+
+    // Generation II
+    { id:'GII_1', gen:2, pos:1, sex:'M', status:'affected', label:'Michael\nFather', age:'43', detail:'HCM diagnosed age 35. Septal myectomy at age 38 — successful. IVS was 22mm pre-operatively. Now plays golf. MYBPC3 variant confirmed — same as Ethan.', highlight:true },
+    { id:'GII_2', gen:2, pos:2, sex:'F', status:'unaffected', label:'Karen\nMother', age:'41', detail:'No cardiac symptoms. Echo performed after Ethan\'s diagnosis: normal IVS. MYBPC3 negative — variant from paternal line confirmed.' },
+
+    // Generation III
+    { id:'GIII_1', gen:3, pos:1, sex:'M', status:'affected', label:'Ethan\n★ Index Case', age:'13', detail:'HCM confirmed. IVS 18mm. LVOT gradient 72 mmHg provocable. MYBPC3 c.3737+1G>A pathogenic. Restriction from football and high-intensity contact sports. Beta blocker initiated. HCM specialist referral.', highlight:true },
+    { id:'GIII_2', gen:3, pos:2, sex:'F', status:'atrisk', label:'Sister\n(Unnamed)', age:'10', detail:'Currently in recreational gymnastics. Echo ORDERED — results pending. MYBPC3 testing ordered. 50% chance of inheriting variant from father. Cannot participate in competitive gymnastics until evaluated.' }
+  ],
+  connections: [
+    { from:'GI_1', to:'GII_1', type:'parent' },
+    { from:'GI_2', to:'GII_1', type:'parent' },
+    { from:'GI_3', to:'GII_2', type:'parent' },
+    { from:'GI_4', to:'GII_2', type:'parent' },
+    { from:'GII_1', to:'GIII_1', type:'parent' },
+    { from:'GII_2', to:'GIII_1', type:'parent' },
+    { from:'GII_1', to:'GIII_2', type:'parent' },
+    { from:'GII_2', to:'GIII_2', type:'parent' }
+  ],
+  cascadeTesting: [
+    { member:'Sister (age 10)', test:'Echocardiography + MYBPC3 gene sequencing', priority:'urgent', reason:'Currently in gymnastics. 50% carrier risk. Echocardiography first — identifies structural disease immediately regardless of genetic result.' },
+    { member:'Michael (Father)', test:'Already confirmed MYBPC3 positive — annual echo surveillance', priority:'routine', reason:'Post-myectomy. Annual echo to monitor for recurrence and arrhythmia risk stratification.' },
+    { member:'Karen (Mother)', test:'Already confirmed MYBPC3 negative — no further cardiac surveillance needed', priority:'routine', reason:'Variant is paternal — maternal line cleared.' },
+    { member:'Paternal grandparents', test:'MYBPC3 gene sequencing + echocardiography', priority:'high', reason:'Variant likely from paternal grandfather — penetrance variable, may be asymptomatic. Grandfather\'s cardiac status unknown.' }
+  ],
+  teachingPoints: [
+    'The dynamic murmur is the most commonly missed physical finding in HCM. Auscultation only in the supine position will miss the dynamic behavior that defines LVOT obstruction.',
+    '"Father had heart surgery for thick heart muscle" was present in Ethan\'s intake form at every annual physical since age 8. It was never probed. It is a lay description of septal myectomy for HCM.',
+    'The sister is the most urgent action item — she is in gymnastics with a 50% chance of inheriting the MYBPC3 variant. Echocardiography before her next session.',
+    'MYBPC3 shows variable penetrance and expressivity — some carriers have minimal hypertrophy, others develop severe obstruction. Asymptomatic does not mean unaffected — annual surveillance echo is required for all variant-positive family members.'
+  ]
+};
