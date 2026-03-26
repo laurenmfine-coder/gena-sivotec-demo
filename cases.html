@@ -359,6 +359,11 @@ a{color:var(--ocean);}
         <span class="ftab-label">"I can't breathe"</span>
         <span class="ftab-count" id="fcount-5">0/5</span>
       </button>
+      <button class="family-tab" id="ftab-6" onclick="showFamily(6)" style="border-top:2px solid #8b1a1a;">
+        <span class="ftab-num" style="color:#c0392b;">Chief Complaint 6</span>
+        <span class="ftab-label">"My child passed out"</span>
+        <span class="ftab-count" id="fcount-6">0/3</span>
+      </button>
     </div>
   </div>
 
@@ -671,6 +676,47 @@ a{color:var(--ocean);}
       </div>
     </div>
 
+    <!-- FAMILY 6: Pediatric Cardiac / Syncope -->
+    <div id="family-6" class="family-panel" style="display:none">
+      <div class="family-intro">
+        <div class="family-intro-label" style="color:#c0392b;">Case Family 6 &nbsp;·&nbsp; Pediatric Cardiac</div>
+        <div class="family-intro-title">"My child passed out"</div>
+        <div class="family-intro-sub">Three children with syncope. One is completely benign. Two have genetic cardiac conditions that were missed for years — available to be caught at every well-child visit. The pediatric cardiologist who received these children downstream knows what that delay cost.</div>
+      </div>
+      <div class="case-grid">
+        <div class="case-card" id="card-H6A" onclick="openCase('H6A')" style="border-top:2px solid #8b1a1a;">
+          <div class="case-accent" style="background:#8b1a1a;"></div>
+          <div class="case-body-inner">
+            <div class="case-num" style="color:#c0392b;">6A &#9733;</div>
+            <div class="case-chief">"He passed out during basketball &mdash; the coach thought he was just overheated"</div>
+            <div class="case-demo">Jordan, 14M &nbsp;&#183;&nbsp; JV basketball &nbsp;&#183;&nbsp; Third episode this year</div>
+            <div class="case-tags"><span class="ctag" style="background:rgba(192,57,43,0.1);color:#c0392b;border-color:rgba(192,57,43,0.3);">CPVT</span><span class="ctag">Genetic</span><span class="ctag">Pediatric</span></div>
+            <div class="case-footer"><span class="case-status" id="status-H6A">Not started</span><button class="case-btn" type="button" onclick="event.stopPropagation();openCase('H6A')">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-H6B" onclick="openCase('H6B')">
+          <div class="case-accent" style="background:#1e8449;"></div>
+          <div class="case-body-inner">
+            <div class="case-num">6B</div>
+            <div class="case-chief">"She fainted in the cafeteria &mdash; everyone thought she was having a seizure"</div>
+            <div class="case-demo">Maya, 15F &nbsp;&#183;&nbsp; First episode &nbsp;&#183;&nbsp; Skipped lunch</div>
+            <div class="case-tags"><span class="ctag">Vasovagal</span><span class="ctag">Benign</span><span class="ctag">Pediatric</span></div>
+            <div class="case-footer"><span class="case-status" id="status-H6B">Not started</span><button class="case-btn" type="button" onclick="event.stopPropagation();openCase('H6B')">Begin &#8594;</button></div>
+          </div>
+        </div>
+        <div class="case-card" id="card-H6C" onclick="openCase('H6C')" style="border-top:2px solid #8b4a1a;">
+          <div class="case-accent" style="background:#8b4a1a;"></div>
+          <div class="case-body-inner">
+            <div class="case-num" style="color:#c0692b;">6C</div>
+            <div class="case-chief">"He gets chest pain when he exercises &mdash; we thought it was growing pains"</div>
+            <div class="case-demo">Ethan, 13M &nbsp;&#183;&nbsp; Football player &nbsp;&#183;&nbsp; Father had "heart surgery" at 38</div>
+            <div class="case-tags"><span class="ctag" style="background:rgba(192,105,43,0.1);color:#c0692b;border-color:rgba(192,105,43,0.3);">HCM</span><span class="ctag">Genetic</span><span class="ctag">Pediatric</span></div>
+            <div class="case-footer"><span class="case-status" id="status-H6C">Not started</span><button class="case-btn" type="button" onclick="event.stopPropagation();openCase('H6C')">Begin &#8594;</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -703,6 +749,9 @@ a{color:var(--ocean);}
 <div id="screen-G5C" class="screen"><div class="case-header" id="hdr-G5C" style="background:linear-gradient(135deg,#3d0505,#8b0000)"></div><div id="body-G5C"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
 <div id="screen-G5D" class="screen"><div class="case-header" id="hdr-G5D" style="background:linear-gradient(135deg,#0d2b52,#1a4a7a)"></div><div id="body-G5D"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
 <div id="screen-G5E" class="screen"><div class="case-header" id="hdr-G5E" style="background:linear-gradient(135deg,#063a30,#0e5c4a)"></div><div id="body-G5E"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-H6A" class="screen"><div class="case-header" id="hdr-H6A" style="background:linear-gradient(135deg,#1a0a3d,#3a1a6e)"></div><div id="body-H6A"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-H6B" class="screen"><div class="case-header" id="hdr-H6B" style="background:linear-gradient(135deg,#1a3a1a,#2e5e2e)"></div><div id="body-H6B"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
+<div id="screen-H6C" class="screen"><div class="case-header" id="hdr-H6C" style="background:linear-gradient(135deg,#2e1a0a,#5c3415)"></div><div id="body-H6C"></div><div class="mod-footer"><div class="footer-txt">A <strong>GENA &#183; SIVOTEC</strong> clinical demo. Cases are illustrative composites.</div><div class="cme-chip">CME Eligible</div></div></div>
 
 <script>
 // Load case data, then initialize
@@ -793,7 +842,8 @@ function goBack() {
 function buildCaseHeader(id) {
   const c = CASES[id];
   const familyMap = {1:['A','B','D1','E1','Raymond'], 2:['C','D','C2','D2','E2'], 3:['A3','B3','C3','D3','E3'], 4:['F4A','F4B','F4C','F4D','F4E'],
-    5:['G5A','G5B','G5C','G5D','G5E']};
+    5:['G5A','G5B','G5C','G5D','G5E'],
+    6:['H6A','H6B','H6C']};
   const familyNum = c.family || 1;
   const familyCases = familyMap[familyNum] || [];
   const caseIdx = familyCases.indexOf(id);
@@ -1249,7 +1299,7 @@ function openModules(caseId) {
   const m = MODULES[caseId];
   // Set header
   document.getElementById('module-drawer-title').textContent = c.diagnosis || 'Evidence Base';
-  document.getElementById('module-drawer-sub').textContent = 'Pathophysiology &#183; Guidelines &#183; Framework &#183; Evidence &#183; EMR Lens';
+  document.getElementById('module-drawer-sub').innerHTML = 'Pathophysiology &nbsp;&middot;&nbsp; Guidelines &nbsp;&middot;&nbsp; Framework &nbsp;&middot;&nbsp; Evidence &nbsp;&middot;&nbsp; EMR Lens';
   // Build tabs
   const tabDefs = [
     {id:'pathophys', label:'Pathophys', icon:'&#9883;'},
@@ -1284,24 +1334,28 @@ function switchModuleTab(tabId) {
 
 function renderModuleContent(caseId, tabId) {
   var m = MODULES[caseId];
-  if (!m || !m[tabId]) return;
-  var data = m[tabId];
+  if (!m) return;
+  // Support both panels[] array and legacy named-key structure
+  var data = null;
+  if (m.panels) {
+    var tabDefs = ['pathophys','guidelines','framework','evidence','emr'];
+    var idx = tabDefs.indexOf(tabId);
+    if (idx >= 0 && idx < m.panels.length) data = m.panels[idx];
+  } else {
+    data = m[tabId];
+  }
+  if (!data) return;
   var html = '<div class="module-panel active">';
-  html += '<div class="module-section-title">' + data.title + '<\/div>';
-  if (data.body) {
-    html += '<div class="module-body-text">' + data.body + '<\/div>';
+  if (data.title) html += '<div class="module-section-title">' + data.title + '<\/div>';
+  if (data.content) html += data.content;
+  if (data.body) html += '<div class="module-body-text">' + data.body + '<\/div>';
+  if (tabId === 'emr') {
+    html += '<div class="module-emr-note">&#128187; <strong>EMR Integration Note:<\/strong> These structured fields, when consistently populated, enable clinical decision support rules to surface this diagnosis earlier.<\/div>';
   }
-  if (tabId === 'emr' && data.body) {
-    html += '<div class="module-emr-note">&#128187; <strong>EMR Integration Note:<\/strong> These structured fields, when consistently populated, enable clinical decision support rules to surface this diagnosis earlier. They represent the intersection of clinical reasoning education and documentation practice.<\/div>';
-  }
-  if (data.table) {
-    html += buildModuleTable(data.table);
-  }
+  if (data.table) html += buildModuleTable(data.table);
   if (data.refs) {
     html += '<div class="module-refs"><div class="module-refs-label">References<\/div>';
-    data.refs.forEach(function(r) {
-      html += '<div class="module-ref-item">' + r + '<\/div>';
-    });
+    data.refs.forEach(function(r) { html += '<div class="module-ref-item">' + r + '<\/div>'; });
     html += '<\/div>';
   }
   html += '<\/div>';
